@@ -227,6 +227,12 @@ evaluateSetup(candles);
 
 detectStructureShift(candles);
 
+generateTradePlan(
+
+Number(latest.close)
+
+);
+
     }
 
     catch(error){
