@@ -213,6 +213,16 @@ async function updateMarketData(){
 
         calculateAsiaRange(candles);
 
+analyzeMarket(
+
+Number(latest.close),
+
+Number(asiaHigh.textContent),
+
+Number(asiaLow.textContent)
+
+);
+
     }
 
     catch(error){
