@@ -229,7 +229,7 @@ if (!data.values || data.values.length === 0) {
 
 analyzeMarket(
 
-Number(latest.close),
+candles,
 
 Number(asiaHigh.textContent),
 
