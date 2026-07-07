@@ -135,3 +135,126 @@
     color: var(--gold);
 
 }
+
+/* ==========================================
+   GOLD GUARDIAN v1.1
+   Professional Dashboard UI
+========================================== */
+
+/* Verdict Colors */
+
+#guardianVerdict{
+
+font-weight:bold;
+
+font-size:1.3rem;
+
+padding:12px;
+
+border-radius:10px;
+
+text-align:center;
+
+transition:0.3s;
+
+}
+
+.verdict-buy{
+
+background:#16a34a;
+
+color:white;
+
+}
+
+.verdict-sell{
+
+background:#dc2626;
+
+color:white;
+
+}
+
+.verdict-watch{
+
+background:#d4a017;
+
+color:black;
+
+}
+
+.verdict-none{
+
+background:#444;
+
+color:white;
+
+}
+
+/* Confidence */
+
+#confidence{
+
+font-size:2rem;
+
+font-weight:bold;
+
+color:#FFD700;
+
+}
+
+/* Checklist */
+
+#guardianChecklist{
+
+padding-left:18px;
+
+line-height:2;
+
+}
+
+#guardianChecklist li{
+
+margin-bottom:6px;
+
+}
+
+/* Trade Plan */
+
+#entryPrice,
+#stopLoss,
+#takeProfit1,
+#takeProfit2,
+#riskReward{
+
+font-weight:bold;
+
+font-size:1.1rem;
+
+}
+
+/* Cards */
+
+.card{
+
+transition:0.25s ease;
+
+}
+
+.card:hover{
+
+transform:translateY(-3px);
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+.card{
+
+margin-bottom:18px;
+
+}
+
+}

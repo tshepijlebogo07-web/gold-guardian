@@ -60,6 +60,42 @@ function updateGuardianDashboard(){
     document.getElementById("confidence").textContent =
     guardian.confidence + "%";
 
+    updateVerdictStyle();
+
 }
 
 updateGuardianDashboard();
+
+function updateVerdictStyle(){
+
+const verdict=document.getElementById("guardianVerdict");
+
+verdict.className="";
+
+switch(guardian.verdict){
+
+case GuardianState.BUY_READY:
+
+verdict.classList.add("verdict-buy");
+
+break;
+
+case GuardianState.SELL_READY:
+
+verdict.classList.add("verdict-sell");
+
+break;
+
+case GuardianState.WATCHING:
+
+verdict.classList.add("verdict-watch");
+
+break;
+
+default:
+
+verdict.classList.add("verdict-none");
+
+}
+
+}
