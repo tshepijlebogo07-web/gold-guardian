@@ -34,7 +34,7 @@ function detectStructureShift(candles){
 
         guardian.bias = MarketBias.BULLISH;
 
-        guardian.confidence = 75;
+        guardian.confidence = GUARDIAN.structureScore;
 
         guardian.verdict = GuardianState.BUY_READY;
 
@@ -54,7 +54,7 @@ function detectStructureShift(candles){
 
         guardian.bias = MarketBias.BEARISH;
 
-        guardian.confidence = 75;
+        guardian.confidence = GUARDIAN.structureScore;
 
         guardian.verdict = GuardianState.SELL_READY;
 

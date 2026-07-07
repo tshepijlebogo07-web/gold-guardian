@@ -34,7 +34,7 @@ function evaluateSetup(candles){
 
     ){
 
-        guardian.confidence = 55;
+        guardian.confidence = GUARDIAN.rejectionScore;
 
         guardian.verdict = "WATCHING";
 
@@ -52,7 +52,7 @@ function evaluateSetup(candles){
 
     ){
 
-        guardian.confidence = 55;
+        guardian.confidence = GUARDIAN.rejectionScore;
 
         guardian.verdict = "WATCHING";
 

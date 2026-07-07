@@ -7,8 +7,8 @@
 // API CONFIGURATION
 // ---------------------------
 
-const API_KEY = "ecb8590ef5f04b2784c8ad9eb4e5064f";
-const SYMBOL = "XAU/USD";
+const API_KEY = CONFIG.apiKey;
+const SYMBOL = CONFIG.symbol;
 
 // ---------------------------
 // SESSION HOURS
@@ -325,4 +325,4 @@ initializeGuardian();
 
 updateMarketData();
 
-setInterval(updateMarketData,30000);
+setInterval(updateMarketData,CONFIG.refreshRate);

@@ -15,7 +15,7 @@ function analyzeMarket(latestPrice, asiaHighValue, asiaLowValue){
 
         guardian.liquidity = "Asia High Swept";
         guardian.bias = MarketBias.BEARISH;
-        guardian.confidence = 30;
+        guardian.confidence = GUARDIAN.liquidityScore;
 
     }
 
@@ -23,7 +23,7 @@ function analyzeMarket(latestPrice, asiaHighValue, asiaLowValue){
 
         guardian.liquidity = "Asia Low Swept";
         guardian.bias = MarketBias.BULLISH;
-        guardian.confidence = 30;
+        guardian.confidence = GUARDIAN.liquidityScore;
 
     }
 
