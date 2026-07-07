@@ -1,59 +1,93 @@
 // ==========================================
 // GOLD GUARDIAN
-// Trade Plan Engine
-// Version 1.0.0
+// Dynamic Trade Plan Engine
+// Version 1.1.0
 // ==========================================
 
-function generateTradePlan(price){
+function generateTradePlan(price, candles){
+
+    if(!candles || candles.length < 3){
+
+        return;
+
+    }
 
     if(
         guardian.verdict !== GuardianState.BUY_READY &&
         guardian.verdict !== GuardianState.SELL_READY
     ){
+
+        clearTradePlan();
+
         return;
+
     }
 
     let entry = price;
 
-    let stop;
+    let stopLoss;
 
-    let tp1;
+    let takeProfit1;
 
-    let tp2;
+    let takeProfit2;
+
+    let risk;
+
+    let reward;
 
     if(guardian.verdict === GuardianState.BUY_READY){
 
-        stop = entry - 5;
+        stopLoss = Number(candles[1].low);
 
-        tp1 = entry + 10;
+        risk = entry - stopLoss;
 
-        tp2 = entry + 20;
+        takeProfit1 = entry + (risk * 2);
+
+        takeProfit2 = entry + (risk * 4);
 
     }
 
     else{
 
-        stop = entry + 5;
+        stopLoss = Number(candles[1].high);
 
-        tp1 = entry - 10;
+        risk = stopLoss - entry;
 
-        tp2 = entry - 20;
+        takeProfit1 = entry - (risk * 2);
+
+        takeProfit2 = entry - (risk * 4);
 
     }
+
+    reward = Math.abs(takeProfit1 - entry);
 
     document.getElementById("entryPrice").textContent =
     entry.toFixed(2);
 
     document.getElementById("stopLoss").textContent =
-    stop.toFixed(2);
+    stopLoss.toFixed(2);
 
     document.getElementById("takeProfit1").textContent =
-    tp1.toFixed(2);
+    takeProfit1.toFixed(2);
 
     document.getElementById("takeProfit2").textContent =
-    tp2.toFixed(2);
+    takeProfit2.toFixed(2);
 
     document.getElementById("riskReward").textContent =
-    "1 : 2";
+    "1 : " + (reward / risk).toFixed(1);
+
+}
+
+function clearTradePlan(){
+
+    document.getElementById("entryPrice").textContent="--";
+
+    document.getElementById("stopLoss").textContent="--";
+
+    document.getElementById("takeProfit1").textContent="--";
+
+    document.getElementById("takeProfit2").textContent="--";
+
+    document.getElementById("riskReward").textContent="--";
 
 }

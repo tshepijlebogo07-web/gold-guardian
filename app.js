@@ -229,7 +229,9 @@ detectStructureShift(candles);
 
 generateTradePlan(
 
-Number(latest.close)
+Number(latest.close),
+
+candles
 
 );
 
