@@ -225,6 +225,8 @@ Number(asiaLow.textContent)
 
 evaluateSetup(candles);
 
+detectStructureShift(candles);
+
     }
 
     catch(error){
