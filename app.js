@@ -187,22 +187,36 @@ async function updateMarketData(){
     try{
 
         const response = await fetch(
+`https://api.twelvedata.com/time_series?symbol=${CONFIG.symbol}&interval=${CONFIG.interval}&outputsize=${CONFIG.outputSize}&apikey=${CONFIG.apiKey}`
+);
 
-`https://api.twelvedata.com/time_series?symbol=${SYMBOL}&interval=15min&outputsize=100&apikey=${API_KEY}`
+if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+}
 
-        );
+const data = await response.json();
 
-        const data = await response.json();
+console.log("TWELVE DATA RESPONSE:", data);
 
-        if(!data.values){
+if (data.status === "error") {
 
-            goldPrice.textContent = "API Error";
+    goldPrice.textContent = data.message;
 
-            console.log(data);
+    console.error(data);
 
-            return;
+    return;
 
-        }
+}
+
+if (!data.values || data.values.length === 0) {
+
+    goldPrice.textContent = "No Data";
+
+    console.error(data);
+
+    return;
+
+}
 
         const candles = data.values;
 

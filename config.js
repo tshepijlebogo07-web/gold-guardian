@@ -8,7 +8,7 @@
 
 const CONFIG = {
 
-    apiKey: "YOUR_API_KEY",
+    apiKey: "ecb8590ef5f04b2784c8ad9eb4e5064f",
 
     symbol: "XAU/USD",
 
