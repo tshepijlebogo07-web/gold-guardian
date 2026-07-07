@@ -223,6 +223,8 @@ Number(asiaLow.textContent)
 
 );
 
+evaluateSetup(candles);
+
     }
 
     catch(error){
