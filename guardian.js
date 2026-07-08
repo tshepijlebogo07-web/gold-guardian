@@ -40,7 +40,23 @@ let guardian = {
 
     verdict: GuardianState.NO_TRADE,
 
-    confidence: 0
+    confidence: 0,
+
+scores:{
+
+    liquidity:false,
+
+    rejection:false,
+
+    structure:false,
+
+    displacement:false,
+
+    riskReward:false,
+
+    news:true
+
+}
 
 };
 
@@ -67,6 +83,50 @@ function updateGuardianDashboard(){
 updateGuardianDashboard();
 
 function updateVerdictStyle(){
+
+function updateConfidence(){
+
+    let score = 0;
+
+    if(guardian.scores.liquidity){
+
+        score += 20;
+
+    }
+
+    if(guardian.scores.rejection){
+
+        score += 20;
+
+    }
+
+    if(guardian.scores.structure){
+
+        score += 20;
+
+    }
+
+    if(guardian.scores.displacement){
+
+        score += 20;
+
+    }
+
+    if(guardian.scores.riskReward){
+
+        score += 15;
+
+    }
+
+    if(guardian.scores.news){
+
+        score += 5;
+
+    }
+
+    guardian.confidence = score;
+
+}
 
 const verdict=document.getElementById("guardianVerdict");
 

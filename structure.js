@@ -49,7 +49,11 @@ function detectStructureShift(candles){
 
     ){
 
-        guardian.confidence = GUARDIAN.readyScore;
+        guardian.scores.structure = true;
+
+guardian.scores.displacement = true;
+
+updateConfidence();
 
         guardian.verdict = GuardianState.BUY_READY;
 
@@ -71,7 +75,11 @@ function detectStructureShift(candles){
 
     ){
 
-        guardian.confidence = GUARDIAN.readyScore;
+        guardian.scores.structure = true;
+
+guardian.scores.displacement = true;
+
+updateConfidence();
 
         guardian.verdict = GuardianState.SELL_READY;
 

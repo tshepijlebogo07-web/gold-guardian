@@ -32,7 +32,9 @@ function evaluateSetup(candles, asiaHighValue, asiaLowValue){
 
     ){
 
-        guardian.confidence = GUARDIAN.rejectionScore;
+        guardian.scores.rejection = true;
+
+updateConfidence();
 
         guardian.verdict = GuardianState.WATCHING;
 
@@ -52,7 +54,9 @@ function evaluateSetup(candles, asiaHighValue, asiaLowValue){
 
     ){
 
-        guardian.confidence = GUARDIAN.rejectionScore;
+        guardian.scores.rejection = true;
+
+updateConfidence();
 
         guardian.verdict = GuardianState.WATCHING;
 

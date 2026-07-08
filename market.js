@@ -35,7 +35,9 @@ function analyzeMarket(candles, asiaHighValue, asiaLowValue){
 
         guardian.bias = MarketBias.BEARISH;
 
-        guardian.confidence = GUARDIAN.liquidityScore;
+        guardian.scores.liquidity = true;
+
+updateConfidence();
 
     }
 
