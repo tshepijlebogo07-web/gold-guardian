@@ -1,7 +1,7 @@
 // ==========================================
 // GOLD GUARDIAN
 // Structure Engine
-// GG-024
+// GG-025
 // ==========================================
 
 function detectStructureShift(candles){
@@ -16,14 +16,25 @@ function detectStructureShift(candles){
 
     const previous = candles[1];
 
+    const latestOpen = Number(latest.open);
     const latestClose = Number(latest.close);
+    const latestHigh = Number(latest.high);
+    const latestLow = Number(latest.low);
 
     const previousHigh = Number(previous.high);
-
     const previousLow = Number(previous.low);
 
+    const body = Math.abs(latestClose - latestOpen);
+    const range = latestHigh - latestLow;
+
+    const bodyPercentage =
+        range > 0 ? body / range : 0;
+
+    const displacement =
+        bodyPercentage >= 0.60;
+
     // --------------------------
-    // BUY Structure Shift
+    // BUY READY
     // --------------------------
 
     if(
@@ -32,18 +43,20 @@ function detectStructureShift(candles){
 
         guardian.bias === MarketBias.BULLISH &&
 
-        latestClose > previousHigh
+        latestClose > previousHigh &&
+
+        displacement
 
     ){
 
-        guardian.confidence = GUARDIAN.structureScore;
+        guardian.confidence = GUARDIAN.readyScore;
 
         guardian.verdict = GuardianState.BUY_READY;
 
     }
 
     // --------------------------
-    // SELL Structure Shift
+    // SELL READY
     // --------------------------
 
     if(
@@ -52,11 +65,13 @@ function detectStructureShift(candles){
 
         guardian.bias === MarketBias.BEARISH &&
 
-        latestClose < previousLow
+        latestClose < previousLow &&
+
+        displacement
 
     ){
 
-        guardian.confidence = GUARDIAN.structureScore;
+        guardian.confidence = GUARDIAN.readyScore;
 
         guardian.verdict = GuardianState.SELL_READY;
 
