@@ -1,38 +1,40 @@
 // ==========================================
 // GOLD GUARDIAN
 // Structure Engine
-// Version 0.9.0
+// GG-024
 // ==========================================
 
 function detectStructureShift(candles){
 
-    if(!candles || candles.length < 4){
+    if(!candles || candles.length < 2){
 
         return;
 
     }
 
-    const c0 = candles[0];
-    const c1 = candles[1];
-    const c2 = candles[2];
+    const latest = candles[0];
 
-    const latestClose = Number(c0.close);
-    const previousHigh = Number(c1.high);
-    const previousLow = Number(c1.low);
+    const previous = candles[1];
 
-    // -------------------------
-    // Bullish MSS
-    // -------------------------
+    const latestClose = Number(latest.close);
+
+    const previousHigh = Number(previous.high);
+
+    const previousLow = Number(previous.low);
+
+    // --------------------------
+    // BUY Structure Shift
+    // --------------------------
 
     if(
 
-        guardian.liquidity === "Asia Low Swept" &&
+        guardian.verdict === GuardianState.WATCHING &&
+
+        guardian.bias === MarketBias.BULLISH &&
 
         latestClose > previousHigh
 
     ){
-
-        guardian.bias = MarketBias.BULLISH;
 
         guardian.confidence = GUARDIAN.structureScore;
 
@@ -40,19 +42,19 @@ function detectStructureShift(candles){
 
     }
 
-    // -------------------------
-    // Bearish MSS
-    // -------------------------
+    // --------------------------
+    // SELL Structure Shift
+    // --------------------------
 
     if(
 
-        guardian.liquidity === "Asia High Swept" &&
+        guardian.verdict === GuardianState.WATCHING &&
+
+        guardian.bias === MarketBias.BEARISH &&
 
         latestClose < previousLow
 
     ){
-
-        guardian.bias = MarketBias.BEARISH;
 
         guardian.confidence = GUARDIAN.structureScore;
 
