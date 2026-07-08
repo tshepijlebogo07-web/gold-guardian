@@ -1,34 +1,42 @@
 // ==========================================
 // GOLD GUARDIAN
-// Trade Journal
-// GG-028
+// JOURNAL ENGINE
+// GG-029
 // ==========================================
+
+const STORAGE_KEY="goldGuardianJournal";
+
+// ----------------------------
 
 function getJournal(){
 
     return JSON.parse(
 
-        localStorage.getItem("goldGuardianJournal")
+        localStorage.getItem(STORAGE_KEY)
 
     ) || [];
 
 }
 
-function saveJournal(journal){
+// ----------------------------
+
+function saveJournal(data){
 
     localStorage.setItem(
 
-        "goldGuardianJournal",
+        STORAGE_KEY,
 
-        JSON.stringify(journal)
+        JSON.stringify(data)
 
     );
 
 }
 
+// ----------------------------
+
 function addTrade(record){
 
-    const journal = getJournal();
+    const journal=getJournal();
 
     journal.unshift(record);
 
@@ -36,11 +44,15 @@ function addTrade(record){
 
     renderJournal();
 
+    updateStatistics();
+
 }
+
+// ----------------------------
 
 function renderJournal(){
 
-    const container =
+    const container=
 
     document.getElementById("journalContainer");
 
@@ -50,7 +62,7 @@ function renderJournal(){
 
     }
 
-    const journal = getJournal();
+    const journal=getJournal();
 
     if(journal.length===0){
 
@@ -74,13 +86,20 @@ function renderJournal(){
 
 ${trade.date}<br>
 
-Entry: ${trade.entry}<br>
+Entry:
+${trade.entry}<br>
 
-SL: ${trade.stopLoss}<br>
+SL:
+${trade.stopLoss}<br>
 
-TP1: ${trade.tp1}<br>
+TP1:
+${trade.tp1}<br>
 
-RR: ${trade.rr}
+RR:
+${trade.rr}<br>
+
+Confidence:
+${trade.confidence}%
 
 </div>
 
@@ -94,4 +113,92 @@ RR: ${trade.rr}
 
 }
 
+// ----------------------------
+
+function updateStatistics(){
+
+    const journal=getJournal();
+
+    const total=journal.length;
+
+    let buys=0;
+
+    let sells=0;
+
+    let confidence=0;
+
+    let rr=0;
+
+    journal.forEach(trade=>{
+
+        if(trade.type==="BUY READY"){
+
+            buys++;
+
+        }
+
+        if(trade.type==="SELL READY"){
+
+            sells++;
+
+        }
+
+        confidence+=Number(trade.confidence);
+
+        rr+=Number(trade.rr);
+
+    });
+
+    document.getElementById(
+
+        "totalSignals"
+
+    ).textContent=total;
+
+    document.getElementById(
+
+        "buySignals"
+
+    ).textContent=buys;
+
+    document.getElementById(
+
+        "sellSignals"
+
+    ).textContent=sells;
+
+    document.getElementById(
+
+        "averageConfidence"
+
+    ).textContent=
+
+    total?
+
+    (confidence/total).toFixed(1)+"%"
+
+    :
+
+    "0%";
+
+    document.getElementById(
+
+        "averageRR"
+
+    ).textContent=
+
+    total?
+
+    (rr/total).toFixed(2)
+
+    :
+
+    "0";
+
+}
+
+// ----------------------------
+
 renderJournal();
+
+updateStatistics();
