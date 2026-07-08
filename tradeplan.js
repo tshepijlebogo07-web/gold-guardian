@@ -77,6 +77,32 @@ const rr = reward / risk;
     document.getElementById("riskReward").textContent =
 "1 : " + rr.toFixed(1);
 
+if(
+
+guardian.verdict===GuardianState.BUY_READY ||
+
+guardian.verdict===GuardianState.SELL_READY
+
+){
+
+addTrade({
+
+date:new Date().toLocaleString(),
+
+type:guardian.verdict,
+
+entry:entry.toFixed(2),
+
+stopLoss:stopLoss.toFixed(2),
+
+tp1:takeProfit1.toFixed(2),
+
+rr:"1 : "+rr.toFixed(1)
+
+});
+
+}
+
 guardian.scores.riskReward =
 rr >= CONFIG.minRiskReward;
 

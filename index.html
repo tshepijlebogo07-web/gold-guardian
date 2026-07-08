@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Gold Guardian</title>
@@ -32,6 +35,8 @@
 
 <main class="dashboard">
 
+<!-- Gold Price -->
+
 <section class="card">
 
 <h2>Current Gold Price</h2>
@@ -40,11 +45,13 @@
 
 </section>
 
+<!-- Guardian Verdict -->
+
 <section class="card hero-card">
 
 <h2>Guardian Verdict</h2>
 
-<p id="guardianVerdict" class="status-neutral">
+<p id="guardianVerdict">
 
 NO TRADE
 
@@ -58,6 +65,8 @@ Discipline Before Profit.
 
 </section>
 
+<!-- Confidence -->
+
 <section class="card">
 
 <h2>Confidence</h2>
@@ -65,6 +74,8 @@ Discipline Before Profit.
 <p id="confidence">0%</p>
 
 </section>
+
+<!-- Asia High -->
 
 <section class="card">
 
@@ -74,6 +85,8 @@ Discipline Before Profit.
 
 </section>
 
+<!-- Asia Low -->
+
 <section class="card">
 
 <h2>Asia Low</h2>
@@ -81,6 +94,8 @@ Discipline Before Profit.
 <p id="asiaLow">--</p>
 
 </section>
+
+<!-- Current Session -->
 
 <section class="card">
 
@@ -90,6 +105,8 @@ Discipline Before Profit.
 
 </section>
 
+<!-- London Countdown -->
+
 <section class="card">
 
 <h2>London Countdown</h2>
@@ -97,6 +114,8 @@ Discipline Before Profit.
 <p id="londonCountdown">--:--:--</p>
 
 </section>
+
+<!-- New York Countdown -->
 
 <section class="card">
 
@@ -106,18 +125,7 @@ Discipline Before Profit.
 
 </section>
 
-</main>
-
-<script src="config.js"></script>
-<script src="guardian.js"></script>
-<script src="market.js"></script>
-<script src="strategy.js"></script>
-<script src="structure.js"></script>
-<script src="tradeplan.js"></script>
-<script src="app.js"></script>
-
-</body>
-</html>
+<!-- Liquidity -->
 
 <section class="card">
 
@@ -131,9 +139,21 @@ Watching
 
 </section>
 
+<!-- Market Bias -->
+
 <section class="card">
 
 <h2>Market Bias</h2>
+
+<p id="marketBias">
+
+Neutral
+
+</p>
+
+</section>
+
+<!-- Guardian Checklist -->
 
 <section class="card">
 
@@ -155,6 +175,8 @@ Watching
 
 </section>
 
+<!-- Entry -->
+
 <section class="card">
 
 <h2>Entry</h2>
@@ -162,6 +184,8 @@ Watching
 <p id="entryPrice">--</p>
 
 </section>
+
+<!-- Stop Loss -->
 
 <section class="card">
 
@@ -171,6 +195,8 @@ Watching
 
 </section>
 
+<!-- Take Profit 1 -->
+
 <section class="card">
 
 <h2>Take Profit 1</h2>
@@ -178,6 +204,8 @@ Watching
 <p id="takeProfit1">--</p>
 
 </section>
+
+<!-- Take Profit 2 -->
 
 <section class="card">
 
@@ -187,6 +215,8 @@ Watching
 
 </section>
 
+<!-- Risk Reward -->
+
 <section class="card">
 
 <h2>Risk : Reward</h2>
@@ -195,10 +225,31 @@ Watching
 
 </section>
 
-<p id="marketBias">
+<!-- Trade Journal -->
 
-Neutral
+<section class="card">
 
-</p>
+<h2>Trade Journal</h2>
+
+<div id="journalContainer">
+
+<p>No trades recorded yet.</p>
+
+</div>
 
 </section>
+
+</main>
+
+<script src="config.js"></script>
+<script src="guardian.js"></script>
+<script src="market.js"></script>
+<script src="strategy.js"></script>
+<script src="structure.js"></script>
+<script src="tradeplan.js"></script>
+<script src="journal.js"></script>
+<script src="app.js"></script>
+
+</body>
+
+</html>
