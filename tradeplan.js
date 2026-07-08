@@ -61,6 +61,7 @@ function generateTradePlan(price, candles){
 
     reward = Math.abs(takeProfit1 - entry);
 
+const rr = reward / risk;
     document.getElementById("entryPrice").textContent =
     entry.toFixed(2);
 
@@ -74,7 +75,23 @@ function generateTradePlan(price, candles){
     takeProfit2.toFixed(2);
 
     document.getElementById("riskReward").textContent =
-    "1 : " + (reward / risk).toFixed(1);
+"1 : " + rr.toFixed(1);
+
+guardian.scores.riskReward =
+rr >= CONFIG.minRiskReward;
+
+updateConfidence();
+
+if(!guardian.scores.riskReward){
+
+    guardian.verdict =
+    GuardianState.NO_TRADE;
+
+    updateGuardianDashboard();
+
+    return;
+
+}
 
 }
 

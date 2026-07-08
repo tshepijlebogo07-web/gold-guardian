@@ -16,7 +16,9 @@ const CONFIG = {
 
     outputSize: 100,
 
-    refreshRate: 30000
+    refreshRate:30000,
+
+minRiskReward:2,
 
 };
 
