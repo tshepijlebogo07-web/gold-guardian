@@ -237,7 +237,15 @@ Number(asiaLow.textContent)
 
 );
 
-evaluateSetup(candles);
+evaluateSetup(
+
+candles,
+
+Number(asiaHigh.textContent),
+
+Number(asiaLow.textContent)
+
+);
 
 detectStructureShift(candles);
 
