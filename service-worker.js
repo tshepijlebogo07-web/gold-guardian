@@ -1,83 +1,85 @@
 // ==========================================
 // GOLD GUARDIAN
 // Service Worker
-// Version 1.1
+// Version 1.0.0
 // ==========================================
 
-const CACHE_NAME = "goldguardian-v2";
+const CACHE_NAME = "goldguardian-v1";
 
 const FILES = [
 
-"./",
+    "./",
 
-"./index.html",
+    "./index.html",
 
-"./variables.css",
+    "./variables.css",
 
-"./layout.css",
+    "./layout.css",
 
-"./dashboard.css",
+    "./dashboard.css",
 
-"./config.js",
+    "./config.js",
 
-"./guardian.js",
+    "./guardian.js",
 
-"./market.js",
+    "./market.js",
 
-"./strategy.js",
+    "./strategy.js",
 
-"./structure.js",
+    "./structure.js",
 
-"./tradeplan.js",
+    "./tradeplan.js",
 
-"./journal.js",
+    "./journal.js",
 
-"./validator.js",
+    "./validator.js",
 
-"./news.js",
+    "./news.js",
 
-"./notifications.js",
+    "./notifications.js",
 
-"./app.js"
+    "./app.js",
+
+    "./manifest.json"
 
 ];
 
-self.addEventListener("install",event=>{
+self.addEventListener("install", event => {
 
-event.waitUntil(
+    event.waitUntil(
 
-caches.open(CACHE_NAME)
+        caches.open(CACHE_NAME)
 
-.then(cache=>cache.addAll(FILES))
+        .then(cache => cache.addAll(FILES))
 
-);
+    );
 
-self.skipWaiting();
-
-});
-
-self.addEventListener("activate",event=>{
-
-event.waitUntil(
-
-self.clients.claim()
-
-);
+    self.skipWaiting();
 
 });
 
-self.addEventListener("fetch",event=>{
+self.addEventListener("activate", event => {
 
-event.respondWith(
+    event.waitUntil(
 
-caches.match(event.request)
+        self.clients.claim()
 
-.then(response=>{
+    );
 
-return response || fetch(event.request);
+});
 
-})
+self.addEventListener("fetch", event => {
 
-);
+    event.respondWith(
+
+        caches.match(event.request)
+
+        .then(response => {
+
+            return response || fetch(event.request);
+
+        })
+
+    );
 
 });
