@@ -13,6 +13,10 @@
 <link rel="stylesheet" href="layout.css">
 <link rel="stylesheet" href="dashboard.css">
 
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#0d1117">
+
 </head>
 
 <body>
@@ -102,6 +106,18 @@ Discipline Before Profit.
 <h2>Current Session</h2>
 
 <p id="currentSession">Detecting...</p>
+
+</section>
+
+<section class="card">
+
+<h2>News Status</h2>
+
+<p id="newsStatus">
+
+🟢 Clear
+
+</p>
 
 </section>
 
@@ -290,8 +306,23 @@ Neutral
 <script src="tradeplan.js"></script>
 <script src="journal.js"></script>
 <script src="validator.js"></script>
-<script src="app.js"></script>>
+<script src="news.js"></script>
+<script src="notifications.js"></script>
+<script src="app.js"></script>
+
+<script>
+
+if("serviceWorker" in navigator){
+
+navigator.serviceWorker.register(
+
+"service-worker.js"
+
+);
+
+}
+
+</script>
 
 </body>
-
 </html>
