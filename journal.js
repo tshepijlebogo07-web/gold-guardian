@@ -1,12 +1,15 @@
 // ==========================================
 // GOLD GUARDIAN
 // JOURNAL ENGINE
-// GG-029
+// GG-030
+// PART 1 OF 2
 // ==========================================
 
-const STORAGE_KEY="goldGuardianJournal";
+const STORAGE_KEY = "goldGuardianJournal";
 
-// ----------------------------
+// ------------------------------------------
+// Load Journal
+// ------------------------------------------
 
 function getJournal(){
 
@@ -18,27 +21,33 @@ function getJournal(){
 
 }
 
-// ----------------------------
+// ------------------------------------------
+// Save Journal
+// ------------------------------------------
 
-function saveJournal(data){
+function saveJournal(journal){
 
     localStorage.setItem(
 
         STORAGE_KEY,
 
-        JSON.stringify(data)
+        JSON.stringify(journal)
 
     );
 
 }
 
-// ----------------------------
+// ------------------------------------------
+// Add Trade
+// ------------------------------------------
 
-function addTrade(record){
+function addTrade(trade){
 
-    const journal=getJournal();
+    const journal = getJournal();
 
-    journal.unshift(record);
+    trade.result = "Pending";
+
+    journal.unshift(trade);
 
     saveJournal(journal);
 
@@ -48,11 +57,49 @@ function addTrade(record){
 
 }
 
-// ----------------------------
+// ------------------------------------------
+// Delete Trade
+// ------------------------------------------
+
+function deleteTrade(index){
+
+    const journal = getJournal();
+
+    journal.splice(index,1);
+
+    saveJournal(journal);
+
+    renderJournal();
+
+    updateStatistics();
+
+}
+
+// ------------------------------------------
+// Update Result
+// ------------------------------------------
+
+function updateTradeResult(index,result){
+
+    const journal = getJournal();
+
+    journal[index].result = result;
+
+    saveJournal(journal);
+
+    renderJournal();
+
+    updateStatistics();
+
+}
+
+// ------------------------------------------
+// Render Journal
+// ------------------------------------------
 
 function renderJournal(){
 
-    const container=
+    const container =
 
     document.getElementById("journalContainer");
 
@@ -62,11 +109,11 @@ function renderJournal(){
 
     }
 
-    const journal=getJournal();
+    const journal = getJournal();
 
     if(journal.length===0){
 
-        container.innerHTML=
+        container.innerHTML =
 
         "<p>No trades recorded yet.</p>";
 
@@ -74,17 +121,17 @@ function renderJournal(){
 
     }
 
-    let html="";
+    let html = "";
 
-    journal.forEach(trade=>{
+    journal.forEach((trade,index)=>{
 
-        html+=`
+        html += `
 
 <div class="journalTrade">
 
 <strong>${trade.type}</strong><br>
 
-${trade.date}<br>
+${trade.date}<br><br>
 
 Entry:
 ${trade.entry}<br>
@@ -99,35 +146,71 @@ RR:
 ${trade.rr}<br>
 
 Confidence:
-${trade.confidence}%
+${trade.confidence}%<br><br>
 
-</div>
+Result:
+
+<strong>${trade.result}</strong><br><br>
+
+<button onclick="updateTradeResult(${index},'Win')">
+
+🟢 WIN
+
+</button>
+
+<button onclick="updateTradeResult(${index},'Loss')">
+
+🔴 LOSS
+
+</button>
+
+<button onclick="updateTradeResult(${index},'Breakeven')">
+
+🟡 BE
+
+</button>
+
+<button onclick="deleteTrade(${index})">
+
+🗑 DELETE
+
+</button>
 
 <hr>
+
+</div>
 
 `;
 
     });
 
-    container.innerHTML=html;
+    container.innerHTML = html;
 
 }
 
-// ----------------------------
+// ------------------------------------------
+// Update Statistics
+// ------------------------------------------
 
 function updateStatistics(){
 
-    const journal=getJournal();
+    const journal = getJournal();
 
-    const total=journal.length;
+    let total = journal.length;
 
-    let buys=0;
+    let buys = 0;
 
-    let sells=0;
+    let sells = 0;
 
-    let confidence=0;
+    let wins = 0;
 
-    let rr=0;
+    let losses = 0;
+
+    let breakevens = 0;
+
+    let confidence = 0;
+
+    let rr = 0;
 
     journal.forEach(trade=>{
 
@@ -143,61 +226,74 @@ function updateStatistics(){
 
         }
 
-        confidence+=Number(trade.confidence);
+        if(trade.result==="Win"){
 
-        rr+=Number(trade.rr);
+            wins++;
+
+        }
+
+        if(trade.result==="Loss"){
+
+            losses++;
+
+        }
+
+        if(trade.result==="Breakeven"){
+
+            breakevens++;
+
+        }
+
+        confidence += Number(trade.confidence)||0;
+
+        rr += Number(trade.rr)||0;
 
     });
 
-    document.getElementById(
+    document.getElementById("totalSignals").textContent =
+    total;
 
-        "totalSignals"
+    document.getElementById("buySignals").textContent =
+    buys;
 
-    ).textContent=total;
+    document.getElementById("sellSignals").textContent =
+    sells;
 
-    document.getElementById(
+    document.getElementById("averageConfidence").textContent =
+    total
+    ? (confidence/total).toFixed(1)+"%"
+    : "0%";
 
-        "buySignals"
-
-    ).textContent=buys;
-
-    document.getElementById(
-
-        "sellSignals"
-
-    ).textContent=sells;
-
-    document.getElementById(
-
-        "averageConfidence"
-
-    ).textContent=
-
-    total?
-
-    (confidence/total).toFixed(1)+"%"
-
-    :
-
-    "0%";
-
-    document.getElementById(
-
-        "averageRR"
-
-    ).textContent=
-
-    total?
-
-    (rr/total).toFixed(2)
-
-    :
-
-    "0";
+    document.getElementById("averageRR").textContent =
+    total
+    ? (rr/total).toFixed(2)
+    : "0";
 
 }
 
-// ----------------------------
+// ------------------------------------------
+// Clear Journal
+// ------------------------------------------
+
+function clearJournal(){
+
+    if(!confirm("Delete all journal entries?")){
+
+        return;
+
+    }
+
+    localStorage.removeItem(STORAGE_KEY);
+
+    renderJournal();
+
+    updateStatistics();
+
+}
+
+// ------------------------------------------
+// Initialize
+// ------------------------------------------
 
 renderJournal();
 
