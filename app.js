@@ -66,10 +66,11 @@ setInterval(updateClock,1000);
 // SESSION DETECTION
 // ---------------------------
 
+let previousSession = "";
+
 function updateSession(){
 
-    const hour =
-    new Date().getHours();
+    const hour = new Date().getHours();
 
     let session = "Closed";
 
@@ -91,8 +92,25 @@ function updateSession(){
 
     }
 
-    currentSession.textContent =
-    session;
+    currentSession.textContent = session;
+
+    if(session !== previousSession){
+
+        previousSession = session;
+
+        clearNotificationMemory();
+
+        sendGuardianNotification(
+
+        "🕒 Session Started",
+
+        session + " Session",
+
+        session
+
+        );
+
+    }
 
 }
 
@@ -128,7 +146,6 @@ function formatCountdown(seconds){
     + String(secs).padStart(2,"0");
 
 }
-
 // ---------------------------
 // SESSION COUNTDOWNS
 // ---------------------------
@@ -185,6 +202,20 @@ setInterval(updateCountdowns,1000);
 async function updateMarketData(){
 
     try{
+    
+    // ---------------------------
+// NEWS FILTER
+// ---------------------------
+
+checkEconomicNews();
+
+if(!tradingAllowed()){
+
+    goldPrice.textContent = "Paused";
+
+    return;
+
+}
 
         const response = await fetch(
 `https://api.twelvedata.com/time_series?symbol=${CONFIG.symbol}&interval=${CONFIG.interval}&outputsize=${CONFIG.outputSize}&apikey=${CONFIG.apiKey}`
@@ -348,3 +379,5 @@ initializeGuardian();
 updateMarketData();
 
 setInterval(updateMarketData,CONFIG.refreshRate);
+
+initializeNotifications();

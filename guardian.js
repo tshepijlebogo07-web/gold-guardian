@@ -84,6 +84,42 @@ updateGuardianDashboard();
 
 function updateVerdictStyle(){
 
+// ---------------------------
+// Notifications
+// ---------------------------
+
+switch(guardian.verdict){
+
+case GuardianState.BUY_READY:
+
+sendGuardianNotification(
+
+"🟢 BUY READY",
+
+"Confidence: " + guardian.confidence + "%",
+
+"buyReady"
+
+);
+
+break;
+
+case GuardianState.SELL_READY:
+
+sendGuardianNotification(
+
+"🔴 SELL READY",
+
+"Confidence: " + guardian.confidence + "%",
+
+"sellReady"
+
+);
+
+break;
+
+}
+
 function updateConfidence(){
 
     let score = 0;
