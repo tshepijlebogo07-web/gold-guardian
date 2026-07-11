@@ -1,10 +1,12 @@
 // ==========================================
 // GOLD GUARDIAN
 // Guardian Decision Engine
-// Version 0.6.0
+// Version 1.0.0
 // ==========================================
 
+// ---------------------------
 // Guardian States
+// ---------------------------
 
 const GuardianState = {
 
@@ -18,7 +20,9 @@ const GuardianState = {
 
 };
 
+// ---------------------------
 // Market Bias
+// ---------------------------
 
 const MarketBias = {
 
@@ -30,7 +34,9 @@ const MarketBias = {
 
 };
 
-// Current State
+// ---------------------------
+// Guardian Object
+// ---------------------------
 
 let guardian = {
 
@@ -42,83 +48,27 @@ let guardian = {
 
     confidence: 0,
 
-scores:{
+    scores:{
 
-    liquidity:false,
+        liquidity:false,
 
-    rejection:false,
+        rejection:false,
 
-    structure:false,
+        structure:false,
 
-    displacement:false,
+        displacement:false,
 
-    riskReward:false,
+        riskReward:false,
 
-    news:true
+        news:true
 
-}
+    }
 
 };
 
-// Update Dashboard
-
-function updateGuardianDashboard(){
-
-    document.getElementById("liquidityStatus").textContent =
-    guardian.liquidity;
-
-    document.getElementById("marketBias").textContent =
-    guardian.bias;
-
-    document.getElementById("guardianVerdict").textContent =
-    guardian.verdict;
-
-    document.getElementById("confidence").textContent =
-    guardian.confidence + "%";
-
-    updateVerdictStyle();
-
-}
-
-updateGuardianDashboard();
-
-function updateVerdictStyle(){
-
 // ---------------------------
-// Notifications
+// Confidence Engine
 // ---------------------------
-
-switch(guardian.verdict){
-
-case GuardianState.BUY_READY:
-
-sendGuardianNotification(
-
-"🟢 BUY READY",
-
-"Confidence: " + guardian.confidence + "%",
-
-"buyReady"
-
-);
-
-break;
-
-case GuardianState.SELL_READY:
-
-sendGuardianNotification(
-
-"🔴 SELL READY",
-
-"Confidence: " + guardian.confidence + "%",
-
-"sellReady"
-
-);
-
-break;
-
-}
 
 function updateConfidence(){
 
@@ -160,38 +110,140 @@ function updateConfidence(){
 
     }
 
-    guardian.confidence = score;
+    guardian.confidence = Math.min(score,100);
 
 }
 
-const verdict=document.getElementById("guardianVerdict");
+// ---------------------------
+// Verdict Style
+// ---------------------------
 
-verdict.className="";
+function updateVerdictStyle(){
 
-switch(guardian.verdict){
+    const verdict = document.getElementById("guardianVerdict");
 
-case GuardianState.BUY_READY:
+    if(!verdict){
 
-verdict.classList.add("verdict-buy");
+        return;
 
-break;
+    }
 
-case GuardianState.SELL_READY:
+    verdict.className = "";
 
-verdict.classList.add("verdict-sell");
+    switch(guardian.verdict){
 
-break;
+        case GuardianState.BUY_READY:
 
-case GuardianState.WATCHING:
+            verdict.classList.add("verdict-buy");
 
-verdict.classList.add("verdict-watch");
+            if(typeof sendGuardianNotification==="function"){
 
-break;
+                sendGuardianNotification(
 
-default:
+                    "🟢 BUY READY",
 
-verdict.classList.add("verdict-none");
+                    "Confidence: " + guardian.confidence + "%",
+
+                    "buyReady"
+
+                );
+
+            }
+
+            break;
+
+        case GuardianState.SELL_READY:
+
+            verdict.classList.add("verdict-sell");
+
+            if(typeof sendGuardianNotification==="function"){
+
+                sendGuardianNotification(
+
+                    "🔴 SELL READY",
+
+                    "Confidence: " + guardian.confidence + "%",
+
+                    "sellReady"
+
+                );
+
+            }
+
+            break;
+
+        case GuardianState.WATCHING:
+
+            verdict.classList.add("verdict-watch");
+
+            break;
+
+        default:
+
+            verdict.classList.add("verdict-none");
+
+    }
 
 }
 
+// ---------------------------
+// Dashboard
+// ---------------------------
+
+function updateGuardianDashboard(){
+
+    document.getElementById("liquidityStatus").textContent =
+    guardian.liquidity;
+
+    document.getElementById("marketBias").textContent =
+    guardian.bias;
+
+    document.getElementById("guardianVerdict").textContent =
+    guardian.verdict;
+
+    document.getElementById("confidence").textContent =
+    guardian.confidence + "%";
+
+    updateVerdictStyle();
+
 }
+
+// ---------------------------
+// Reset Guardian
+// ---------------------------
+
+function resetGuardian(){
+
+    guardian.liquidity = "Watching";
+
+    guardian.bias = MarketBias.NEUTRAL;
+
+    guardian.verdict = GuardianState.NO_TRADE;
+
+    guardian.scores = {
+
+        liquidity:false,
+
+        rejection:false,
+
+        structure:false,
+
+        displacement:false,
+
+        riskReward:false,
+
+        news:true
+
+    };
+
+    updateConfidence();
+
+    updateGuardianDashboard();
+
+}
+
+// ---------------------------
+// Initialize
+// ---------------------------
+
+updateGuardianDashboard();

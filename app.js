@@ -102,7 +102,7 @@ function updateSession(){
 
         sendGuardianNotification(
 
-        "🕒 Session Started",
+        "ð Session Started",
 
         session + " Session",
 

@@ -1,16 +1,24 @@
 // ==========================================
 // GOLD GUARDIAN
 // Market Engine
-// Version 1.0
-// GG-022
+// Version 1.1.0
+// GG-034.5 Recovery
 // ==========================================
 
 function analyzeMarket(candles, asiaHighValue, asiaLowValue){
+
+    // Reset Guardian State
 
     guardian.liquidity = "Watching";
     guardian.bias = MarketBias.NEUTRAL;
     guardian.verdict = GuardianState.NO_TRADE;
     guardian.confidence = 0;
+
+    guardian.scores.liquidity = false;
+    guardian.scores.rejection = false;
+    guardian.scores.structure = false;
+    guardian.scores.displacement = false;
+    guardian.scores.riskReward = false;
 
     if(!candles || candles.length < 2){
 
@@ -37,7 +45,7 @@ function analyzeMarket(candles, asiaHighValue, asiaLowValue){
 
         guardian.scores.liquidity = true;
 
-updateConfidence();
+        updateConfidence();
 
     }
 
@@ -45,13 +53,15 @@ updateConfidence();
     // Asia Low Liquidity Sweep
     // --------------------------
 
-    if(latestLow < asiaLowValue){
+    else if(latestLow < asiaLowValue){
 
         guardian.liquidity = "Asia Low Swept";
 
         guardian.bias = MarketBias.BULLISH;
 
-        guardian.confidence = GUARDIAN.liquidityScore;
+        guardian.scores.liquidity = true;
+
+        updateConfidence();
 
     }
 
