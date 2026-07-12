@@ -40,15 +40,24 @@ const MarketBias = {
 
 let guardian = {
 
+    // Current Liquidity Status
+
     liquidity: "Watching",
+
+    // Market Bias
 
     bias: MarketBias.NEUTRAL,
 
+    // Guardian Verdict
+
     verdict: GuardianState.NO_TRADE,
+
+    // Overall Confidence
 
     confidence: 0,
 
     // Fair Value Gap
+
     fvg:{
 
         detected:false,
@@ -62,6 +71,7 @@ let guardian = {
     },
 
     // Order Block
+
     orderBlock:{
 
         detected:false,
@@ -75,6 +85,7 @@ let guardian = {
     },
 
     // Premium / Discount
+
     premiumDiscount:{
 
         zone:"Equilibrium",
@@ -82,6 +93,8 @@ let guardian = {
         midpoint:0
 
     },
+
+    // Confirmation Scores
 
     scores:{
 
@@ -93,15 +106,15 @@ let guardian = {
 
         displacement:false,
 
-        riskReward:false,
-
-        news:true,
-
         fvg:false,
 
         orderBlock:false,
 
-        premiumDiscount:false
+        premiumDiscount:false,
+
+        riskReward:false,
+
+        news:true
 
     }
 
@@ -169,7 +182,7 @@ function updateConfidence(){
 
     }
 
-    guardian.confidence = score;
+    guardian.confidence = Math.min(score,100);
 
     updateGuardianDashboard();
 
@@ -181,7 +194,8 @@ function updateConfidence(){
 
 function updateVerdictStyle(){
 
-    const verdict = document.getElementById("guardianVerdict");
+    const verdict =
+    document.getElementById("guardianVerdict");
 
     if(!verdict){
 
@@ -197,21 +211,21 @@ function updateVerdictStyle(){
 
             verdict.classList.add("verdict-buy");
 
-            if(typeof sendGuardianNotification==="function"){
+            if(typeof sendGuardianNotification === "function"){
 
                 sendGuardianNotification(
 
-"🟢 BUY READY",
+                    "🟢 BUY READY",
 
-"Confidence: " +
+                    "Confidence: " +
+                    guardian.confidence +
+                    "% | Entry Ready",
 
-guardian.confidence +
+                    "buyReady"
 
-"% | Entry Ready",
+                );
 
-"buyReady"
-
-);
+            }
 
             break;
 
@@ -219,19 +233,21 @@ guardian.confidence +
 
             verdict.classList.add("verdict-sell");
 
-            if(typeof sendGuardianNotification(
+            if(typeof sendGuardianNotification === "function"){
 
-"🔴 SELL READY",
+                sendGuardianNotification(
 
-"Confidence: " +
+                    "🔴 SELL READY",
 
-guardian.confidence +
+                    "Confidence: " +
+                    guardian.confidence +
+                    "% | Entry Ready",
 
-"% | Entry Ready",
+                    "sellReady"
 
-"sellReady"
+                );
 
-);
+            }
 
             break;
 
@@ -255,87 +271,142 @@ guardian.confidence +
 
 function updateGuardianDashboard(){
 
+    // Core Dashboard
+
     document.getElementById("liquidityStatus").textContent =
     guardian.liquidity;
 
     document.getElementById("marketBias").textContent =
     guardian.bias;
 
-document.getElementById("premiumDiscount").textContent =
-guardian.premiumDiscount.zone;
-
-document.getElementById("fvgStatus").textContent =
-guardian.fvg.detected
-? guardian.fvg.type
-: "None";
-
-document.getElementById("orderBlockStatus").textContent =
-guardian.orderBlock.detected
-? guardian.orderBlock.type
-: "None";
-
-const completed = [
-
-guardian.scores.liquidity,
-
-guardian.scores.rejection,
-
-guardian.scores.structure,
-
-guardian.scores.displacement,
-
-guardian.scores.fvg,
-
-guardian.scores.orderBlock,
-
-guardian.scores.premiumDiscount,
-
-guardian.scores.riskReward
-
-].filter(Boolean).length;
-
-document.getElementById("confirmationProgress").textContent =
-completed + " / 8";
     document.getElementById("guardianVerdict").textContent =
     guardian.verdict;
 
     document.getElementById("confidence").textContent =
     guardian.confidence + "%";
 
+    // Premium / Discount
+
+    const premium =
+    document.getElementById("premiumDiscount");
+
+    if(premium){
+
+        premium.textContent =
+        guardian.premiumDiscount.zone;
+
+    }
+
+    // Fair Value Gap
+
+    const fvg =
+    document.getElementById("fvgStatus");
+
+    if(fvg){
+
+        fvg.textContent =
+        guardian.fvg.detected
+        ? guardian.fvg.type
+        : "None";
+
+    }
+
+    // Order Block
+
+    const orderBlock =
+    document.getElementById("orderBlockStatus");
+
+    if(orderBlock){
+
+        orderBlock.textContent =
+        guardian.orderBlock.detected
+        ? guardian.orderBlock.type
+        : "None";
+
+    }
+
+    // Confirmation Progress
+
+    const progress =
+    document.getElementById("confirmationProgress");
+
+    if(progress){
+
+        const completed = [
+
+            guardian.scores.liquidity,
+
+            guardian.scores.rejection,
+
+            guardian.scores.structure,
+
+            guardian.scores.displacement,
+
+            guardian.scores.fvg,
+
+            guardian.scores.orderBlock,
+
+            guardian.scores.premiumDiscount,
+
+            guardian.scores.riskReward
+
+        ].filter(Boolean).length;
+
+        progress.textContent =
+        completed + " / 8";
+
+    }
+
+    // Guardian Checklist
+
+    const checks = {
+
+        checkLiquidity:
+        guardian.scores.liquidity,
+
+        checkRejection:
+        guardian.scores.rejection,
+
+        checkStructure:
+        guardian.scores.structure,
+
+        checkDisplacement:
+        guardian.scores.displacement,
+
+        checkFVG:
+        guardian.scores.fvg,
+
+        checkOrderBlock:
+        guardian.scores.orderBlock,
+
+        checkPremium:
+        guardian.scores.premiumDiscount,
+
+        checkRR:
+        guardian.scores.riskReward
+
+    };
+
+    for(const id in checks){
+
+        const item =
+        document.getElementById(id);
+
+        if(!item){
+
+            continue;
+
+        }
+
+        const label =
+        item.textContent.replace(/^✅\s*|^⏳\s*/, "");
+
+        item.textContent =
+        (checks[id] ? "✅ " : "⏳ ") + label;
+
+    }
+
     updateVerdictStyle();
-    
-const checks = {
-
-checkLiquidity: guardian.scores.liquidity,
-
-checkRejection: guardian.scores.rejection,
-
-checkStructure: guardian.scores.structure,
-
-checkDisplacement: guardian.scores.displacement,
-
-checkFVG: guardian.scores.fvg,
-
-checkOrderBlock: guardian.scores.orderBlock,
-
-checkPremium: guardian.scores.premiumDiscount,
-
-checkRR: guardian.scores.riskReward
-
-};
-
-for(const id in checks){
-
-const item = document.getElementById(id);
-
-if(!item) continue;
-
-item.textContent =
-item.textContent.replace(/^✅|^⏳/, "");
-
-item.textContent =
-(checks[id] ? "✅ " : "⏳ ") +
-item.textContent.trim();
 
 }
 
@@ -351,6 +422,40 @@ function resetGuardian(){
 
     guardian.verdict = GuardianState.NO_TRADE;
 
+    guardian.confidence = 0;
+
+    guardian.fvg = {
+
+        detected:false,
+
+        type:"None",
+
+        top:0,
+
+        bottom:0
+
+    };
+
+    guardian.orderBlock = {
+
+        detected:false,
+
+        type:"None",
+
+        high:0,
+
+        low:0
+
+    };
+
+    guardian.premiumDiscount = {
+
+        zone:"Equilibrium",
+
+        midpoint:0
+
+    };
+
     guardian.scores = {
 
         liquidity:false,
@@ -361,20 +466,24 @@ function resetGuardian(){
 
         displacement:false,
 
+        fvg:false,
+
+        orderBlock:false,
+
+        premiumDiscount:false,
+
         riskReward:false,
 
         news:true
 
     };
 
-    updateConfidence();
-
     updateGuardianDashboard();
 
 }
 
 // ---------------------------
-// Initialize
+// Initialize Guardian
 // ---------------------------
 
 updateGuardianDashboard();
