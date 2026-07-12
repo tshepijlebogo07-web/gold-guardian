@@ -7,7 +7,25 @@
 
 // Prevent duplicate notifications
 
-let notificationMemory = {};
+let notificationMemory = {
+
+    asiaSweep:false,
+
+    rejection:false,
+
+    structure:false,
+
+    fvg:false,
+
+    orderBlock:false,
+
+    buyReady:false,
+
+    sellReady:false,
+
+    session:false
+
+};
 
 // ----------------------------
 // Request Permission
@@ -85,6 +103,142 @@ function sendGuardianNotification(title, body, key){
 
 function clearNotificationMemory(){
 
-    notificationMemory={};
+    notificationMemory = {
+
+        asiaSweep:false,
+
+        rejection:false,
+
+        structure:false,
+
+        fvg:false,
+
+        orderBlock:false,
+
+        buyReady:false,
+
+        sellReady:false,
+
+        session:false
+
+    };
+
+}
+
+// ==========================================
+// Smart Notification Sequence
+// ==========================================
+
+function updateGuardianNotifications(){
+
+    if(
+
+        guardian.scores.liquidity &&
+
+        !notificationMemory.asiaSweep
+
+    ){
+
+        notificationMemory.asiaSweep = true;
+
+        sendGuardianNotification(
+
+            "💧 Liquidity Sweep",
+
+            guardian.liquidity,
+
+            "asiaSweep"
+
+        );
+
+    }
+
+    if(
+
+        guardian.scores.rejection &&
+
+        !notificationMemory.rejection
+
+    ){
+
+        notificationMemory.rejection = true;
+
+        sendGuardianNotification(
+
+            "🕯 Rejection Confirmed",
+
+            guardian.bias,
+
+            "rejection"
+
+        );
+
+    }
+
+    if(
+
+        guardian.scores.structure &&
+
+        !notificationMemory.structure
+
+    ){
+
+        notificationMemory.structure = true;
+
+        sendGuardianNotification(
+
+            "📈 Structure Shift",
+
+            guardian.bias,
+
+            "structure"
+
+        );
+
+    }
+
+    if(
+
+        guardian.scores.fvg &&
+
+        !notificationMemory.fvg
+
+    ){
+
+        notificationMemory.fvg = true;
+
+        sendGuardianNotification(
+
+            "⚡ Fair Value Gap",
+
+            guardian.fvg.type,
+
+            "fvg"
+
+        );
+
+    }
+
+    if(
+
+        guardian.scores.orderBlock &&
+
+        !notificationMemory.orderBlock
+
+    ){
+
+        notificationMemory.orderBlock = true;
+
+        sendGuardianNotification(
+
+            "🏦 Order Block",
+
+            guardian.orderBlock.type,
+
+            "orderBlock"
+
+        );
+
+    }
 
 }

@@ -293,13 +293,27 @@ async function updateMarketData(){
 
         detectStructureShift(candles);
 
-        generateTradePlan(
+detectFVG(candles);
 
-            Number(latest.close),
+detectOrderBlock(candles);
 
-            candles
+detectPremiumDiscount(
 
-        );
+    Number(latest.close)
+
+);
+
+confirmTradeSetup();
+
+updateGuardianNotifications();
+
+generateTradePlan(
+
+    Number(latest.close),
+
+    candles
+
+);
 
         logDebug("Market data updated.");
 

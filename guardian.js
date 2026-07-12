@@ -48,6 +48,41 @@ let guardian = {
 
     confidence: 0,
 
+    // Fair Value Gap
+    fvg:{
+
+        detected:false,
+
+        type:"None",
+
+        top:0,
+
+        bottom:0
+
+    },
+
+    // Order Block
+    orderBlock:{
+
+        detected:false,
+
+        type:"None",
+
+        high:0,
+
+        low:0
+
+    },
+
+    // Premium / Discount
+    premiumDiscount:{
+
+        zone:"Equilibrium",
+
+        midpoint:0
+
+    },
+
     scores:{
 
         liquidity:false,
@@ -60,7 +95,13 @@ let guardian = {
 
         riskReward:false,
 
-        news:true
+        news:true,
+
+        fvg:false,
+
+        orderBlock:false,
+
+        premiumDiscount:false
 
     }
 
@@ -76,31 +117,49 @@ function updateConfidence(){
 
     if(guardian.scores.liquidity){
 
-        score += 20;
+        score += 15;
 
     }
 
     if(guardian.scores.rejection){
 
-        score += 20;
+        score += 10;
 
     }
 
     if(guardian.scores.structure){
 
-        score += 20;
+        score += 15;
 
     }
 
     if(guardian.scores.displacement){
 
-        score += 20;
+        score += 15;
+
+    }
+
+    if(guardian.scores.fvg){
+
+        score += 10;
+
+    }
+
+    if(guardian.scores.orderBlock){
+
+        score += 10;
+
+    }
+
+    if(guardian.scores.premiumDiscount){
+
+        score += 10;
 
     }
 
     if(guardian.scores.riskReward){
 
-        score += 15;
+        score += 10;
 
     }
 
@@ -110,7 +169,9 @@ function updateConfidence(){
 
     }
 
-    guardian.confidence = Math.min(score,100);
+    guardian.confidence = score;
+
+    updateGuardianDashboard();
 
 }
 
@@ -140,15 +201,17 @@ function updateVerdictStyle(){
 
                 sendGuardianNotification(
 
-                    "🟢 BUY READY",
+"🟢 BUY READY",
 
-                    "Confidence: " + guardian.confidence + "%",
+"Confidence: " +
 
-                    "buyReady"
+guardian.confidence +
 
-                );
+"% | Entry Ready",
 
-            }
+"buyReady"
+
+);
 
             break;
 
@@ -156,19 +219,19 @@ function updateVerdictStyle(){
 
             verdict.classList.add("verdict-sell");
 
-            if(typeof sendGuardianNotification==="function"){
+            if(typeof sendGuardianNotification(
 
-                sendGuardianNotification(
+"🔴 SELL READY",
 
-                    "🔴 SELL READY",
+"Confidence: " +
 
-                    "Confidence: " + guardian.confidence + "%",
+guardian.confidence +
 
-                    "sellReady"
+"% | Entry Ready",
 
-                );
+"sellReady"
 
-            }
+);
 
             break;
 
@@ -198,6 +261,41 @@ function updateGuardianDashboard(){
     document.getElementById("marketBias").textContent =
     guardian.bias;
 
+document.getElementById("premiumDiscount").textContent =
+guardian.premiumDiscount.zone;
+
+document.getElementById("fvgStatus").textContent =
+guardian.fvg.detected
+? guardian.fvg.type
+: "None";
+
+document.getElementById("orderBlockStatus").textContent =
+guardian.orderBlock.detected
+? guardian.orderBlock.type
+: "None";
+
+const completed = [
+
+guardian.scores.liquidity,
+
+guardian.scores.rejection,
+
+guardian.scores.structure,
+
+guardian.scores.displacement,
+
+guardian.scores.fvg,
+
+guardian.scores.orderBlock,
+
+guardian.scores.premiumDiscount,
+
+guardian.scores.riskReward
+
+].filter(Boolean).length;
+
+document.getElementById("confirmationProgress").textContent =
+completed + " / 8";
     document.getElementById("guardianVerdict").textContent =
     guardian.verdict;
 
@@ -205,6 +303,39 @@ function updateGuardianDashboard(){
     guardian.confidence + "%";
 
     updateVerdictStyle();
+    
+const checks = {
+
+checkLiquidity: guardian.scores.liquidity,
+
+checkRejection: guardian.scores.rejection,
+
+checkStructure: guardian.scores.structure,
+
+checkDisplacement: guardian.scores.displacement,
+
+checkFVG: guardian.scores.fvg,
+
+checkOrderBlock: guardian.scores.orderBlock,
+
+checkPremium: guardian.scores.premiumDiscount,
+
+checkRR: guardian.scores.riskReward
+
+};
+
+for(const id in checks){
+
+const item = document.getElementById(id);
+
+if(!item) continue;
+
+item.textContent =
+item.textContent.replace(/^✅|^⏳/, "");
+
+item.textContent =
+(checks[id] ? "✅ " : "⏳ ") +
+item.textContent.trim();
 
 }
 
