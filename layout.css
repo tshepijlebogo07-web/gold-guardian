@@ -46,3 +46,25 @@ body {
     grid-template-columns:
         repeat(auto-fit, minmax(260px, 1fr));
 }
+
+/* ==========================================
+TradingView Chart
+========================================== */
+
+.chart-card{
+
+    padding:0;
+
+    overflow:hidden;
+
+}
+
+#tradingviewChart{
+
+    width:100%;
+
+    height:600px;
+
+    min-height:500px;
+    
+}

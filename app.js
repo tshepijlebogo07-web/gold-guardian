@@ -402,6 +402,59 @@ function initializeGuardian(){
 }
 
 // ---------------------------
+// TradingView Chart
+// GG-036
+// ---------------------------
+
+function initializeTradingView(){
+
+    if(typeof TradingView === "undefined"){
+
+        logDebug("TradingView library not loaded.", false);
+
+        return;
+
+    }
+
+    new TradingView.widget({
+
+        container_id: "tradingviewChart",
+
+        autosize: true,
+
+        symbol: "OANDA:XAUUSD",
+
+        interval: "5",
+
+        timezone: "Africa/Johannesburg",
+
+        theme: "dark",
+
+        style: "1",
+
+        locale: "en",
+
+        toolbar_bg: "#111111",
+
+        enable_publishing: false,
+
+        hide_top_toolbar: false,
+
+        hide_legend: false,
+
+        allow_symbol_change: false,
+
+        save_image: false,
+
+        studies: []
+
+    });
+
+    logDebug("TradingView Chart Loaded");
+
+}
+
+// ---------------------------
 // START ENGINES
 // ---------------------------
 
@@ -411,6 +464,8 @@ updateMarketData();
 
 logDebug("Market Engine Started");
 
-setInterval(updateMarketData,CONFIG.refreshRate);
+setInterval(updateMarketData, CONFIG.refreshRate);
+
+initializeTradingView();
 
 initializeNotifications();
