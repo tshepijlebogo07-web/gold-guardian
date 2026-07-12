@@ -157,7 +157,6 @@ function formatCountdown(seconds){
 
 function updateCountdowns(){
 
-    logDebug("Entered updateCountdowns()");
 
     const now = new Date();
 
