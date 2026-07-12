@@ -119,6 +119,8 @@ function updateSession(){
 
 updateSession();
 
+logDebug("Session Started");
+
 setInterval(updateSession,60000);
 
 // ---------------------------
@@ -154,6 +156,8 @@ function formatCountdown(seconds){
 // ---------------------------
 
 function updateCountdowns(){
+
+    logDebug("Entered updateCountdowns()");
 
     const now = new Date();
 

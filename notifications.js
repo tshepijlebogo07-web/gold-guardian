@@ -35,9 +35,15 @@ async function initializeNotifications(){
 // Send Notification
 // ----------------------------
 
-function sendGuardianNotification(title,body,key){
+function sendGuardianNotification(title, body, key){
 
-    if(Notification.permission!=="granted"){
+    if(typeof Notification === "undefined"){
+
+        return;
+
+    }
+
+    if(Notification.permission !== "granted"){
 
         return;
 
@@ -49,17 +55,27 @@ function sendGuardianNotification(title,body,key){
 
     }
 
-    notificationMemory[key]=true;
+    notificationMemory[key] = true;
 
-    new Notification(title,{
+    try{
 
-        body:body,
+        new Notification(title,{
 
-        icon:"icon-192.png",
+            body: body,
 
-        badge:"icon-192.png"
+            icon: "icon-192.png",
 
-    });
+            badge: "icon-192.png"
+
+        });
+
+    }
+
+    catch(error){
+
+        console.error(error);
+
+    }
 
 }
 
