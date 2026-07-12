@@ -10,6 +10,8 @@
 const API_KEY = CONFIG.apiKey;
 const SYMBOL = CONFIG.symbol;
 
+logDebug("Configuration Loaded");
+
 // ---------------------------
 // SESSION HOURS
 // ---------------------------
@@ -60,6 +62,8 @@ function updateClock(){
 
 updateClock();
 
+logDebug("Clock Started");
+
 setInterval(updateClock,1000);
 
 // ---------------------------
@@ -102,14 +106,13 @@ function updateSession(){
 
         sendGuardianNotification(
 
-        "ð Session Started",
+        "🕒 Session Started",
 
         session + " Session",
 
         session
 
         );
-
     }
 
 }
@@ -193,6 +196,8 @@ function updateCountdowns(){
 
 updateCountdowns();
 
+logDebug("Countdown Started");
+
 setInterval(updateCountdowns,1000);
 
 // ---------------------------
@@ -202,52 +207,58 @@ setInterval(updateCountdowns,1000);
 async function updateMarketData(){
 
     try{
-    
-    // ---------------------------
-// NEWS FILTER
-// ---------------------------
 
-checkEconomicNews();
+        // ---------------------------
+        // NEWS FILTER
+        // ---------------------------
 
-if(!tradingAllowed()){
+        checkEconomicNews();
 
-    goldPrice.textContent = "Paused";
+        if(!tradingAllowed()){
 
-    return;
+            goldPrice.textContent = "Paused";
 
-}
+            return;
+
+        }
 
         const response = await fetch(
 `https://api.twelvedata.com/time_series?symbol=${CONFIG.symbol}&interval=${CONFIG.interval}&outputsize=${CONFIG.outputSize}&apikey=${CONFIG.apiKey}`
-);
+        );
 
-if (!response.ok) {
-    throw new Error("HTTP " + response.status);
-}
+        if(!response.ok){
 
-const data = await response.json();
+            throw new Error("HTTP " + response.status);
 
-console.log("TWELVE DATA RESPONSE:", data);
+        }
 
-if (data.status === "error") {
+        const data = await response.json();
 
-    goldPrice.textContent = data.message;
+        console.log("TWELVE DATA RESPONSE:", data);
 
-    console.error(data);
+        if(data.status === "error"){
 
-    return;
+            goldPrice.textContent = data.message;
 
-}
+            console.error(data);
 
-if (!data.values || data.values.length === 0) {
+            logDebug(data.message, false);
 
-    goldPrice.textContent = "No Data";
+            return;
 
-    console.error(data);
+        }
 
-    return;
+        if(!data.values || data.values.length === 0){
 
-}
+            goldPrice.textContent = "No Data";
+
+            console.error(data);
+
+            logDebug("No candle data received.", false);
+
+            return;
+
+        }
 
         const candles = data.values;
 
@@ -258,41 +269,45 @@ if (!data.values || data.values.length === 0) {
 
         calculateAsiaRange(candles);
 
-analyzeMarket(
+        analyzeMarket(
 
-candles,
+            candles,
 
-Number(asiaHigh.textContent),
+            Number(asiaHigh.textContent),
 
-Number(asiaLow.textContent)
+            Number(asiaLow.textContent)
 
-);
+        );
 
-evaluateSetup(
+        evaluateSetup(
 
-candles,
+            candles,
 
-Number(asiaHigh.textContent),
+            Number(asiaHigh.textContent),
 
-Number(asiaLow.textContent)
+            Number(asiaLow.textContent)
 
-);
+        );
 
-detectStructureShift(candles);
+        detectStructureShift(candles);
 
-generateTradePlan(
+        generateTradePlan(
 
-Number(latest.close),
+            Number(latest.close),
 
-candles
+            candles
 
-);
+        );
+
+        logDebug("Market data updated.");
 
     }
 
     catch(error){
 
         goldPrice.textContent = "Offline";
+
+        logDebug(error.message, false);
 
         console.error(error);
 
@@ -377,6 +392,8 @@ function initializeGuardian(){
 initializeGuardian();
 
 updateMarketData();
+
+logDebug("Market Engine Started");
 
 setInterval(updateMarketData,CONFIG.refreshRate);
 
