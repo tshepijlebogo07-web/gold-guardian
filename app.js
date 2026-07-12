@@ -157,7 +157,6 @@ function formatCountdown(seconds){
 
 function updateCountdowns(){
 
-
     const now = new Date();
 
     const london = new Date(now);
