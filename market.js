@@ -1,28 +1,76 @@
 // ==========================================
 // GOLD GUARDIAN
 // Market Engine
-// Version 1.1.0
-// GG-034.5 Recovery
+// Version 1.2.0
+// GG-037 Package 1
 // ==========================================
+
+// --------------------------
+// Session Memory Manager
+// GG-037
+// --------------------------
+
+function resetGuardianMemory(){
+
+    guardian.memory = {
+
+        active:false,
+
+        liquiditySide:null,
+
+        sweepPrice:0,
+
+        sweepTime:null,
+
+        session:null,
+
+        confirmations:0,
+
+        tradeIssued:false
+
+    };
+
+    guardian.liquidity = "Watching";
+
+    guardian.bias = MarketBias.NEUTRAL;
+
+    guardian.scores.liquidity = false;
+
+    logDebug("Guardian memory reset.");
+
+}
 
 function analyzeMarket(candles, asiaHighValue, asiaLowValue){
 
-    // Reset Guardian State
+    // --------------------------
+    // Reset Dynamic State
+    // --------------------------
+
+guardian.verdict = GuardianState.NO_TRADE;
+
+guardian.confidence = 0;
+
+if(!guardian.memory.active){
 
     guardian.liquidity = "Watching";
+
     guardian.bias = MarketBias.NEUTRAL;
-    guardian.verdict = GuardianState.NO_TRADE;
-    guardian.confidence = 0;
+
+}
 
     guardian.scores.liquidity = false;
+
     guardian.scores.rejection = false;
+
     guardian.scores.structure = false;
+
     guardian.scores.displacement = false;
+
     guardian.scores.riskReward = false;
 
-    if(!candles || candles.length < 2){
-    
-       updateLiquidityVisualizer();
+    if(!candles || candles.length < 3){
+
+        updateLiquidityVisualizer();
 
         updateGuardianDashboard();
 
@@ -30,42 +78,111 @@ function analyzeMarket(candles, asiaHighValue, asiaLowValue){
 
     }
 
-    const latest = candles[0];
-
-    const latestHigh = Number(latest.high);
-    const latestLow = Number(latest.low);
-
     // --------------------------
-    // Asia High Liquidity Sweep
+    // Check Last 3 Candles
     // --------------------------
 
-    if(latestHigh > asiaHighValue){
+    let asiaHighSwept = false;
+
+    let asiaLowSwept = false;
+
+    for(let i = 0; i < 3; i++){
+
+        const candle = candles[i];
+
+        if(Number(candle.high) > asiaHighValue){
+
+            asiaHighSwept = true;
+
+        }
+
+        if(Number(candle.low) < asiaLowValue){
+
+            asiaLowSwept = true;
+
+        }
+
+    }
+
+    // --------------------------
+    // Determine Liquidity
+    // --------------------------
+
+    if(
+
+    asiaLowSwept &&
+
+    (
+
+        !guardian.memory.active ||
+
+        guardian.memory.liquiditySide === "SELL"
+
+    )
+
+){
+
+guardian.liquidity = "Asia Low Swept";
+
+guardian.bias = MarketBias.BULLISH;
+
+guardian.scores.liquidity = true;
+
+guardian.memory.active = true;
+
+guardian.memory.liquiditySide = "BUY";
+
+guardian.memory.sweepPrice = asiaLowValue;
+
+guardian.memory.sweepTime = Date.now();
+
+guardian.memory.session = currentSession.textContent;
+
+guardian.memory.confirmations = 0;
+
+guardian.memory.tradeIssued = false;
+
+    }
+
+    else if(
+
+    asiaHighSwept &&
+
+    (
+
+        !guardian.memory.active ||
+
+        guardian.memory.liquiditySide === "BUY"
+
+    )
+
+){
 
         guardian.liquidity = "Asia High Swept";
 
-        guardian.bias = MarketBias.BEARISH;
+guardian.bias = MarketBias.BEARISH;
 
-        guardian.scores.liquidity = true;
+guardian.scores.liquidity = true;
 
-        updateConfidence();
+guardian.memory.active = true;
 
-    }
+guardian.memory.liquiditySide = "SELL";
 
-    // --------------------------
-    // Asia Low Liquidity Sweep
-    // --------------------------
+guardian.memory.sweepPrice = asiaHighValue;
 
-    else if(latestLow < asiaLowValue){
+guardian.memory.sweepTime = Date.now();
 
-        guardian.liquidity = "Asia Low Swept";
+guardian.memory.session = currentSession.textContent;
 
-        guardian.bias = MarketBias.BULLISH;
+guardian.memory.confirmations = 0;
 
-        guardian.scores.liquidity = true;
-
-        updateConfidence();
+guardian.memory.tradeIssued = false;
 
     }
+
+    updateConfidence();
+
+    updateLiquidityVisualizer();
 
     updateGuardianDashboard();
 

@@ -6,6 +6,14 @@
 
 function detectStructureShift(candles){
 
+if(!guardian.memory.active){
+
+    guardian.scores.structure = false;
+
+    return;
+
+}
+
     if(!candles || candles.length < 2){
 
         return;
@@ -50,6 +58,12 @@ function detectStructureShift(candles){
     ){
 
         guardian.scores.structure = true;
+        
+        guardian.memory.structureConfirmed = true;
+
+guardian.memory.confirmations++;
+
+updateConfidence();
 
 guardian.scores.displacement = true;
 

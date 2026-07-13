@@ -55,6 +55,28 @@ let guardian = {
     // Overall Confidence
 
     confidence: 0,
+    
+    // Persistent Market Memory
+
+memory:{
+
+    active:false,
+
+    liquiditySide:null,
+
+    sweepPrice:0,
+
+    sweepTime:null,
+
+    session:null,
+
+    confirmations:0,
+
+    tradeIssued:false,
+
+    structureConfirmed:false
+
+},
 
     // Fair Value Gap
 
@@ -603,5 +625,5 @@ function updateLiquidityVisualizer(){
 // ---------------------------
 
 updateGuardianDashboard();
-updateLiquidityVisualizer();
+updateLiquidityVisualizer(); 
 
