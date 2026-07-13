@@ -357,7 +357,7 @@ function updateGuardianDashboard(){
 
     }
 
-    // Guardian Checklist
+        // Guardian Checklist
 
     const checks = {
 
@@ -399,13 +399,25 @@ function updateGuardianDashboard(){
         }
 
         const label =
-        item.textContent.replace(/^✅\s*|^⏳\s*/, "");
+        item.textContent.replace(
+            /^✅\s*|^⏳\s*/,
+            ""
+        );
 
         item.textContent =
-        (checks[id] ? "✅ " : "⏳ ") + label;
+        (checks[id] ? "✅ " : "⏳ ") +
+        label;
 
     }
 
+    // Update Liquidity Visualizer
+    if(typeof updateLiquidityVisualizer === "function"){
+
+        updateLiquidityVisualizer();
+
+    }
+
+    // Update Verdict Styling
     updateVerdictStyle();
 
 }
@@ -500,92 +512,87 @@ function updateLiquidityVisualizer(){
 
     const sellCard =
     document.getElementById("sellLiquidityCard");
-    
+
+    const buyTime =
+    document.getElementById("buyLiquidityTime");
+
+    const sellTime =
+    document.getElementById("sellLiquidityTime");
+
     const summary =
-document.getElementById("liquiditySummary");
+    document.getElementById("liquiditySummary");
 
-    if(!buyStatus ||
-       !sellStatus ||
-       !buyCard ||
-       !sellCard){
-
+    if(
+        !buyStatus ||
+        !sellStatus ||
+        !buyCard ||
+        !sellCard
+    ){
         return;
-
     }
 
     buyCard.classList.remove("liquidity-active");
-
     sellCard.classList.remove("liquidity-active");
 
     buyStatus.textContent = "Waiting...";
-
     sellStatus.textContent = "Waiting...";
-    
-    
-    
-const buyTime =
-document.getElementById("buyLiquidityTime");
-
-const sellTime =
-document.getElementById("sellLiquidityTime");
-
-if(buyTime){
-
-    buyTime.textContent =
-    "No sweep detected";
-
-}
-
-if(sellTime){
-
-    sellTime.textContent =
-    "No sweep detected";
-
-}
-
-if(guardian.liquidity === "Asia Low Swept"){
-
-    buyStatus.textContent =
-    "Liquidity Taken";
-
-    buyCard.classList.add("liquidity-active");
 
     if(buyTime){
-
-        buyTime.textContent =
-        "Detected: " +
-        new Date().toLocaleTimeString();
-
+        buyTime.textContent = "No sweep detected";
     }
-
-    if(summary){
-
-        summary.textContent =
-        "Sell-side liquidity has been taken. Guardian is now watching for bullish confirmation.";
-
-    }
-
-}
-
-if(guardian.liquidity === "Asia High Swept"){
-
-    sellStatus.textContent =
-    "Liquidity Taken";
-
-    sellCard.classList.add("liquidity-active");
 
     if(sellTime){
-
-        sellTime.textContent =
-        "Detected: " +
-        new Date().toLocaleTimeString();
-
+        sellTime.textContent = "No sweep detected";
     }
 
     if(summary){
-
         summary.textContent =
-        "Buy-side liquidity has been taken. Guardian is now watching for bearish confirmation.";
+        "Waiting for liquidity sweep...";
+    }
+
+    if(guardian.liquidity === "Asia Low Swept"){
+
+        buyStatus.textContent = "Liquidity Taken";
+
+        buyCard.classList.add("liquidity-active");
+
+        if(buyTime){
+
+            buyTime.textContent =
+            "Detected: " +
+            new Date().toLocaleTimeString();
+
+        }
+
+        if(summary){
+
+            summary.textContent =
+            "Sell-side liquidity has been taken. Guardian is watching for bullish confirmation.";
+
+        }
+
+    }
+
+    if(guardian.liquidity === "Asia High Swept"){
+
+        sellStatus.textContent = "Liquidity Taken";
+
+        sellCard.classList.add("liquidity-active");
+
+        if(sellTime){
+
+            sellTime.textContent =
+            "Detected: " +
+            new Date().toLocaleTimeString();
+
+        }
+
+        if(summary){
+
+            summary.textContent =
+            "Buy-side liquidity has been taken. Guardian is watching for bearish confirmation.";
+
+        }
 
     }
 
@@ -596,4 +603,5 @@ if(guardian.liquidity === "Asia High Swept"){
 // ---------------------------
 
 updateGuardianDashboard();
+updateLiquidityVisualizer();
 
