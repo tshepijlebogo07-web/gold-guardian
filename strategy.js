@@ -1,7 +1,7 @@
 // ==========================================
 // GOLD GUARDIAN
 // Strategy Engine
-// GG-023
+// GG-037
 // ==========================================
 
 function evaluateSetup(candles, asiaHighValue, asiaLowValue){
@@ -17,6 +17,8 @@ function evaluateSetup(candles, asiaHighValue, asiaLowValue){
     const latestOpen = Number(latest.open);
 
     const latestClose = Number(latest.close);
+
+    guardian.scores.rejection = false;
 
     // --------------------------
     // BUY REJECTION
@@ -34,8 +36,6 @@ function evaluateSetup(candles, asiaHighValue, asiaLowValue){
 
         guardian.scores.rejection = true;
 
-updateConfidence();
-
         guardian.verdict = GuardianState.WATCHING;
 
     }
@@ -44,7 +44,7 @@ updateConfidence();
     // SELL REJECTION
     // --------------------------
 
-    if(
+    else if(
 
         guardian.liquidity === "Asia High Swept" &&
 
@@ -56,11 +56,11 @@ updateConfidence();
 
         guardian.scores.rejection = true;
 
-updateConfidence();
-
         guardian.verdict = GuardianState.WATCHING;
 
     }
+
+    updateConfidence();
 
     updateGuardianDashboard();
 

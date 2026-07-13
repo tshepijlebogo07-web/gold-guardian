@@ -65,10 +65,6 @@ guardian.memory.confirmations++;
 
 updateConfidence();
 
-guardian.scores.displacement = true;
-
-updateConfidence();
-
         guardian.verdict = GuardianState.BUY_READY;
 
     }
@@ -90,8 +86,6 @@ updateConfidence();
     ){
 
         guardian.scores.structure = true;
-
-guardian.scores.displacement = true;
 
 updateConfidence();
 

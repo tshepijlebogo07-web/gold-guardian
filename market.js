@@ -1,8 +1,8 @@
 // ==========================================
 // GOLD GUARDIAN
 // Market Engine
-// Version 1.2.0
-// GG-037 Package 1
+// Version 1.3.0
+// GG-037 Package 5
 // ==========================================
 
 // --------------------------
@@ -26,7 +26,9 @@ function resetGuardianMemory(){
 
         confirmations:0,
 
-        tradeIssued:false
+        tradeIssued:false,
+
+        structureConfirmed:false
 
     };
 
@@ -46,17 +48,17 @@ function analyzeMarket(candles, asiaHighValue, asiaLowValue){
     // Reset Dynamic State
     // --------------------------
 
-guardian.verdict = GuardianState.NO_TRADE;
+    guardian.verdict = GuardianState.NO_TRADE;
 
-guardian.confidence = 0;
+    guardian.confidence = 0;
 
-if(!guardian.memory.active){
+    if(!guardian.memory.active){
 
-    guardian.liquidity = "Watching";
+        guardian.liquidity = "Watching";
 
-    guardian.bias = MarketBias.NEUTRAL;
+        guardian.bias = MarketBias.NEUTRAL;
 
-}
+    }
 
     guardian.scores.liquidity = false;
 
@@ -110,77 +112,113 @@ if(!guardian.memory.active){
 
     if(
 
-    asiaLowSwept &&
+        asiaLowSwept &&
 
-    (
+        (
 
-        !guardian.memory.active ||
+            !guardian.memory.active ||
 
-        guardian.memory.liquiditySide === "SELL"
+            guardian.memory.liquiditySide === "SELL"
 
-    )
+        )
 
-){
+    ){
 
-guardian.liquidity = "Asia Low Swept";
+        guardian.liquidity = "Asia Low Swept";
 
-guardian.bias = MarketBias.BULLISH;
+        guardian.bias = MarketBias.BULLISH;
 
-guardian.scores.liquidity = true;
+        guardian.scores.liquidity = true;
 
-guardian.memory.active = true;
+        guardian.memory.active = true;
 
-guardian.memory.liquiditySide = "BUY";
+        guardian.memory.liquiditySide = "BUY";
 
-guardian.memory.sweepPrice = asiaLowValue;
+        guardian.memory.sweepPrice = asiaLowValue;
 
-guardian.memory.sweepTime = Date.now();
+        guardian.memory.sweepTime = Date.now();
 
-guardian.memory.session = currentSession.textContent;
+        guardian.memory.session = currentSession.textContent;
 
-guardian.memory.confirmations = 0;
+        guardian.memory.confirmations = 0;
 
-guardian.memory.tradeIssued = false;
+        guardian.memory.tradeIssued = false;
+
+        guardian.memory.structureConfirmed = false;
 
     }
 
     else if(
 
-    asiaHighSwept &&
+        asiaHighSwept &&
 
-    (
+        (
 
-        !guardian.memory.active ||
+            !guardian.memory.active ||
 
-        guardian.memory.liquiditySide === "BUY"
+            guardian.memory.liquiditySide === "BUY"
 
-    )
+        )
 
-){
+    ){
 
         guardian.liquidity = "Asia High Swept";
 
-guardian.bias = MarketBias.BEARISH;
+        guardian.bias = MarketBias.BEARISH;
 
-guardian.scores.liquidity = true;
+        guardian.scores.liquidity = true;
 
-guardian.memory.active = true;
+        guardian.memory.active = true;
 
-guardian.memory.liquiditySide = "SELL";
+        guardian.memory.liquiditySide = "SELL";
 
-guardian.memory.sweepPrice = asiaHighValue;
+        guardian.memory.sweepPrice = asiaHighValue;
 
-guardian.memory.sweepTime = Date.now();
+        guardian.memory.sweepTime = Date.now();
 
-guardian.memory.session = currentSession.textContent;
+        guardian.memory.session = currentSession.textContent;
 
-guardian.memory.confirmations = 0;
+        guardian.memory.confirmations = 0;
 
-guardian.memory.tradeIssued = false;
+        guardian.memory.tradeIssued = false;
+
+        guardian.memory.structureConfirmed = false;
 
     }
 
     updateConfidence();
+
+    // --------------------------
+    // Smart Money Analysis Chain
+    // --------------------------
+
+    detectStructureShift(candles);
+
+    detectDisplacement(candles);
+
+    detectFVG(candles);
+
+    detectOrderBlock(candles);
+
+    detectPremiumDiscount(
+
+        Number(candles[0].close)
+
+    );
+
+    confirmTradeSetup();
+
+    updateGuardianNotifications();
+
+    generateTradePlan(
+
+        Number(candles[0].close),
+
+        candles
+
+    );
+
+    // --------------------------
 
     updateLiquidityVisualizer();
 
