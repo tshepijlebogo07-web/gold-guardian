@@ -74,6 +74,8 @@ memory:{
 
     tradeIssued:false,
 
+    fvgConfirmed:false
+
     structureConfirmed:false
 
 },

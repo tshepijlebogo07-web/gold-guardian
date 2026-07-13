@@ -1,7 +1,7 @@
 // ==========================================
 // GOLD GUARDIAN
-// Fair Value Gap Engine
-// GG-035 Part 1
+// Smart Fair Value Gap Engine
+// GG-037 Package 6
 // ==========================================
 
 function detectFVG(candles){
@@ -9,6 +9,26 @@ function detectFVG(candles){
     guardian.fvg.detected = false;
 
     guardian.fvg.type = "None";
+
+    guardian.scores.fvg = false;
+
+    // --------------------------
+    // Wait for Structure
+    // --------------------------
+
+    if(
+
+        !guardian.memory.active ||
+
+        !guardian.memory.structureConfirmed ||
+
+        !guardian.scores.displacement
+
+    ){
+
+        return;
+
+    }
 
     if(!candles || candles.length < 3){
 
@@ -22,11 +42,13 @@ function detectFVG(candles){
 
     const third = candles[2];
 
-    // ------------------------
+    // --------------------------
     // Bullish FVG
-    // ------------------------
+    // --------------------------
 
     if(
+
+        guardian.bias === MarketBias.BULLISH &&
 
         Number(latest.low) >
 
@@ -47,6 +69,10 @@ function detectFVG(candles){
         Number(third.high);
 
         guardian.scores.fvg = true;
+        
+        guardian.memory.fvgConfirmed = true;
+
+        guardian.memory.confirmations++;
 
         updateConfidence();
 
@@ -54,11 +80,13 @@ function detectFVG(candles){
 
     }
 
-    // ------------------------
+    // --------------------------
     // Bearish FVG
-    // ------------------------
+    // --------------------------
 
     if(
+
+        guardian.bias === MarketBias.BEARISH &&
 
         Number(latest.high) <
 
@@ -79,6 +107,10 @@ function detectFVG(candles){
         Number(latest.high);
 
         guardian.scores.fvg = true;
+        
+        guardian.memory.fvgConfirmed = true;
+
+                guardian.memory.confirmations++;
 
         updateConfidence();
 
@@ -86,6 +118,10 @@ function detectFVG(candles){
 
     }
 
-    guardian.scores.fvg = false;
+    // --------------------------
+    // No FVG Found
+    // --------------------------
+
+    guardian.memory.fvgConfirmed = false;
 
 }
