@@ -483,7 +483,117 @@ function resetGuardian(){
 }
 
 // ---------------------------
+// Liquidity Visualizer
+// GG-036
+// ---------------------------
+
+function updateLiquidityVisualizer(){
+
+    const buyStatus =
+    document.getElementById("buyLiquidityStatus");
+
+    const sellStatus =
+    document.getElementById("sellLiquidityStatus");
+
+    const buyCard =
+    document.getElementById("buyLiquidityCard");
+
+    const sellCard =
+    document.getElementById("sellLiquidityCard");
+    
+    const summary =
+document.getElementById("liquiditySummary");
+
+    if(!buyStatus ||
+       !sellStatus ||
+       !buyCard ||
+       !sellCard){
+
+        return;
+
+    }
+
+    buyCard.classList.remove("liquidity-active");
+
+    sellCard.classList.remove("liquidity-active");
+
+    buyStatus.textContent = "Waiting...";
+
+    sellStatus.textContent = "Waiting...";
+    
+    
+    
+const buyTime =
+document.getElementById("buyLiquidityTime");
+
+const sellTime =
+document.getElementById("sellLiquidityTime");
+
+if(buyTime){
+
+    buyTime.textContent =
+    "No sweep detected";
+
+}
+
+if(sellTime){
+
+    sellTime.textContent =
+    "No sweep detected";
+
+}
+
+if(guardian.liquidity === "Asia Low Swept"){
+
+    buyStatus.textContent =
+    "Liquidity Taken";
+
+    buyCard.classList.add("liquidity-active");
+
+    if(buyTime){
+
+        buyTime.textContent =
+        "Detected: " +
+        new Date().toLocaleTimeString();
+
+    }
+
+    if(summary){
+
+        summary.textContent =
+        "Sell-side liquidity has been taken. Guardian is now watching for bullish confirmation.";
+
+    }
+
+}
+
+if(guardian.liquidity === "Asia High Swept"){
+
+    sellStatus.textContent =
+    "Liquidity Taken";
+
+    sellCard.classList.add("liquidity-active");
+
+    if(sellTime){
+
+        sellTime.textContent =
+        "Detected: " +
+        new Date().toLocaleTimeString();
+
+    }
+
+    if(summary){
+
+        summary.textContent =
+        "Buy-side liquidity has been taken. Guardian is now watching for bearish confirmation.";
+
+    }
+
+}
+
+// ---------------------------
 // Initialize Guardian
 // ---------------------------
 
 updateGuardianDashboard();
+

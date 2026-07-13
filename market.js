@@ -21,6 +21,8 @@ function analyzeMarket(candles, asiaHighValue, asiaLowValue){
     guardian.scores.riskReward = false;
 
     if(!candles || candles.length < 2){
+    
+       updateLiquidityVisualizer();
 
         updateGuardianDashboard();
 

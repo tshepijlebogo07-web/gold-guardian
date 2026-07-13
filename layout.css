@@ -196,3 +196,103 @@ font-size:1.1rem;
 color:var(--gold);
 
 }
+
+/* ==========================================
+GG-036 Liquidity Sweep
+========================================== */
+
+.liquidity-panel{
+
+display:grid;
+
+grid-template-columns:repeat(2,1fr);
+
+gap:16px;
+
+margin-top:12px;
+
+}
+
+.liquidity-card{
+
+padding:16px;
+
+border-radius:12px;
+
+background:#1d1d1d;
+
+text-align:center;
+
+border:1px solid #2a2a2a;
+
+transition:.3s;
+
+}
+
+.liquidity-card h3{
+
+margin-bottom:10px;
+
+}
+
+.liquidity-card p{
+
+font-weight:bold;
+
+}
+
+.liquidity-active{
+
+border:2px solid var(--gold);
+
+transform:scale(1.02);
+
+}
+
+.liquidity-card small{
+
+display:block;
+
+margin-top:10px;
+
+font-size:.8rem;
+
+color:var(--text-muted);
+
+}
+
+/* ==========================================
+GG-036 Liquidity Summary
+========================================== */
+
+.liquidity-summary{
+
+margin-top:20px;
+
+padding:16px;
+
+border-radius:12px;
+
+background:#181818;
+
+border-left:4px solid var(--gold);
+
+}
+
+.liquidity-summary strong{
+
+display:block;
+
+margin-bottom:8px;
+
+color:var(--gold);
+
+}
+
+.liquidity-summary p{
+
+line-height:1.5;
+
+color:var(--text);
+
+}
