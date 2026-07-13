@@ -29,20 +29,22 @@ window.onerror = function(message, source, line, column, error){
 
     logDebug("ERROR: " + message, false);
 
-    logDebug("File: " + source, false);
+    logDebug("SOURCE: " + source, false);
 
-    logDebug("Line: " + line + ":" + column, false);
+    logDebug("LINE: " + line, false);
 
-    if(error){
+    logDebug("COLUMN: " + column, false);
 
-        console.error(error);
+    console.error(error);
 
-    }
+    return false;
 
 };
 
-window.addEventListener("load",()=>{
+window.addEventListener("unhandledrejection", function(event){
 
-    logDebug("Application Loaded");
+    logDebug("PROMISE ERROR: " + event.reason, false);
+
+    console.error(event.reason);
 
 });
