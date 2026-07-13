@@ -367,9 +367,9 @@ detectPremiumDiscount(
 
 );
 
-confirmTradeSetup();
+// confirmTradeSetup();
 
-updateGuardianNotifications();
+// updateGuardianNotifications();
 
 generateTradePlan(
 
