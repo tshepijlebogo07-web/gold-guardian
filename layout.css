@@ -68,3 +68,131 @@ TradingView Chart
     min-height:500px;
     
 }
+
+/* ==========================================
+GG-036 Asia Session Range
+========================================== */
+
+.asia-range{
+
+display:flex;
+
+flex-direction:column;
+
+gap:16px;
+
+}
+
+.asia-level{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.asia-level strong{
+
+color:var(--gold);
+
+font-size:1.1rem;
+
+}
+
+.asia-zone{
+
+height:14px;
+
+border-radius:999px;
+
+background:#1f1f1f;
+
+overflow:hidden;
+
+}
+
+#asiaRangeFill{
+
+width:100%;
+
+height:100%;
+
+background:linear-gradient(
+90deg,
+#c49b00,
+#ffd700
+);
+
+}
+
+/* ==========================================
+GG-036 Asia Statistics
+========================================== */
+
+.asia-stats{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:16px;
+
+margin-top:18px;
+
+text-align:center;
+
+}
+
+.asia-stats span{
+
+display:block;
+
+font-size:.8rem;
+
+color:var(--text-muted);
+
+margin-bottom:6px;
+
+}
+
+.asia-stats strong{
+
+font-size:1rem;
+
+color:var(--gold);
+
+}
+
+/* ==========================================
+GG-036 Asia Signal
+========================================== */
+
+.asia-signal{
+
+margin-top:20px;
+
+padding:14px;
+
+border-radius:10px;
+
+text-align:center;
+
+font-weight:bold;
+
+background:#1d1d1d;
+
+}
+
+#asiaSignal{
+
+display:block;
+
+margin-top:8px;
+
+font-size:1.1rem;
+
+color:var(--gold);
+
+}

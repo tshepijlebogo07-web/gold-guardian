@@ -269,6 +269,70 @@ async function updateMarketData(){
         goldPrice.textContent =
         "$ " + Number(latest.close).toFixed(2);
 
+const currentPrice =
+Number(latest.close);
+
+const distanceHigh =
+document.getElementById("distanceHigh");
+
+const distanceLow =
+document.getElementById("distanceLow");
+
+const highValue =
+Number(asiaHigh.textContent);
+
+const lowValue =
+Number(asiaLow.textContent);
+
+if(distanceHigh && !isNaN(highValue)){
+
+distanceHigh.textContent =
+(highValue-currentPrice).toFixed(2);
+
+}
+
+if(distanceLow && !isNaN(lowValue)){
+
+distanceLow.textContent =
+(currentPrice-lowValue).toFixed(2);
+
+}
+
+const asiaSignal =
+document.getElementById("asiaSignal");
+
+if(asiaSignal){
+
+    const range = highValue - lowValue;
+
+    const buyZone =
+    lowValue + (range * 0.25);
+
+    const sellZone =
+    highValue - (range * 0.25);
+
+    if(currentPrice <= buyZone){
+
+        asiaSignal.textContent =
+        "🟢 Near Asia Low (BUY ZONE)";
+
+    }
+
+    else if(currentPrice >= sellZone){
+
+        asiaSignal.textContent =
+        "🔴 Near Asia High (SELL ZONE)";
+
+    }
+
+    else{
+
+        asiaSignal.textContent =
+        "🟡 Mid Range (WAIT)";
+
+    }
+
+}
         calculateAsiaRange(candles);
 
         analyzeMarket(
@@ -377,6 +441,16 @@ function calculateAsiaRange(candles){
 
         asiaHigh.textContent =
         high.toFixed(2);
+        
+        const asiaHighVisual =
+document.getElementById("asiaHighVisual");
+
+if(asiaHighVisual){
+
+    asiaHighVisual.textContent =
+    high.toFixed(2);
+
+}
 
     }
 
@@ -384,6 +458,29 @@ function calculateAsiaRange(candles){
 
         asiaLow.textContent =
         low.toFixed(2);
+        
+        const asiaLowVisual =
+document.getElementById("asiaLowVisual");
+
+if(asiaLowVisual){
+
+    asiaLowVisual.textContent =
+    low.toFixed(2);
+
+}
+
+const rangeSize =
+(high-low).toFixed(2);
+
+const range =
+document.getElementById("asiaRangeSize");
+
+if(range){
+
+range.textContent =
+rangeSize;
+
+}
 
     }
 
