@@ -9,7 +9,7 @@ function validateSystem(){
     const api =
     document.getElementById("apiStatus");
 
-    const guardian =
+    const guardianStatus =
     document.getElementById("guardianStatus");
 
     const journal =
@@ -18,29 +18,47 @@ function validateSystem(){
     const dashboard =
     document.getElementById("dashboardStatus");
 
-    api.textContent =
-    navigator.onLine
-    ? "🟢 Online"
-    : "🔴 Offline";
+    if(api){
 
-    guardian.textContent = "🟢 Ready";
+        api.textContent =
+        navigator.onLine
+        ? "🟢 Online"
+        : "🔴 Offline";
 
-    journal.textContent =
+    }
 
-    localStorage.getItem("goldGuardianJournal")
+    if(guardianStatus){
 
-    ? "🟢 Ready"
+        guardianStatus.textContent =
+        "🟢 Ready";
 
-    : "🟡 Empty";
+    }
 
-    dashboard.textContent = "🟢 Ready";
+    if(journal){
+
+        journal.textContent =
+
+        localStorage.getItem("goldGuardianJournal")
+
+        ? "🟢 Ready"
+
+        : "🟡 Empty";
+
+    }
+
+    if(dashboard){
+
+        dashboard.textContent =
+        "🟢 Ready";
+
+    }
 
 }
 
 window.addEventListener(
 
-"load",
+    "load",
 
-validateSystem
+    validateSystem
 
 );
