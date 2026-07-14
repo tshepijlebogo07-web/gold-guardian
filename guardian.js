@@ -76,7 +76,7 @@ memory:{
 
     fvgConfirmed:false,
 
-    orderBlockConfirmed:false
+    orderBlockConfirmed:false,
 
     structureConfirmed:false
 
