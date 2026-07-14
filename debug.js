@@ -29,15 +29,13 @@ window.onerror = function(message, source, line, column, error){
 
     logDebug("ERROR: " + message, false);
 
-    logDebug("SOURCE: " + source, false);
+    logDebug("Source: " + source, false);
 
-    logDebug("LINE: " + line, false);
+    logDebug("Line: " + line, false);
 
-    logDebug("COLUMN: " + column, false);
+    logDebug("Column: " + column, false);
 
-    console.error(error);
-
-    return false;
+    console.error(message, source, line, column, error);
 
 };
 
