@@ -1,7 +1,7 @@
 // ==========================================
 // GOLD GUARDIAN
-// Order Block Engine
-// GG-035 Part 2
+// Smart Order Block Engine
+// GG-037 Package 7
 // ==========================================
 
 function detectOrderBlock(candles){
@@ -12,18 +12,39 @@ function detectOrderBlock(candles){
 
     guardian.scores.orderBlock = false;
 
-    if(!candles || candles.length < 4){
+    guardian.memory.orderBlockConfirmed = false;
+
+    // --------------------------
+    // Wait for FVG Confirmation
+    // --------------------------
+
+    if(
+
+        !guardian.memory.active ||
+
+        !guardian.memory.structureConfirmed ||
+
+        !guardian.memory.fvgConfirmed
+
+    ){
+
+        return;
+
+    }
+
+    if(!candles || candles.length < 2){
 
         return;
 
     }
 
     const latest = candles[0];
+
     const previous = candles[1];
 
-    // ------------------------
+    // --------------------------
     // Bullish Order Block
-    // ------------------------
+    // --------------------------
 
     if(
 
@@ -45,15 +66,19 @@ function detectOrderBlock(candles){
 
         guardian.scores.orderBlock = true;
 
+        guardian.memory.orderBlockConfirmed = true;
+
+        guardian.memory.confirmations++;
+
         updateConfidence();
 
         return;
 
     }
 
-    // ------------------------
+    // --------------------------
     // Bearish Order Block
-    // ------------------------
+    // --------------------------
 
     if(
 
@@ -75,8 +100,16 @@ function detectOrderBlock(candles){
 
         guardian.scores.orderBlock = true;
 
+        guardian.memory.orderBlockConfirmed = true;
+
+        guardian.memory.confirmations++;
+
         updateConfidence();
 
+        return;
+
     }
+
+    guardian.memory.orderBlockConfirmed = false;
 
 }

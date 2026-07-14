@@ -34,7 +34,7 @@ function confirmTradeSetup(){
 
         guardian.scores.fvg &&
 
-        guardian.scores.orderBlock &&
+           guardian.memory.orderBlockConfirmed &&
 
         guardian.scores.premiumDiscount &&
 
