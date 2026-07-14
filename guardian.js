@@ -208,7 +208,13 @@ function updateConfidence(){
 
     }
 
-    guardian.confidence = Math.min(score,100);
+    guardian.confidence =
+
+Math.round(
+
+(guardian.memory.confirmations / 8) * 100
+
+);
 
     updateGuardianDashboard();
 

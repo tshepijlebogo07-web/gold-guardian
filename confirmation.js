@@ -1,18 +1,18 @@
 // ==========================================
 // GOLD GUARDIAN
-// Smart Confirmation Engine
-// GG-035 Part 4
+// Final Signal Orchestrator
+// GG-037 Final
 // ==========================================
 
 function confirmTradeSetup(){
 
-    // Reset
+    // --------------------------
+    // No Active Sweep
+    // --------------------------
 
-    guardian.verdict = GuardianState.NO_TRADE;
+    if(!guardian.memory.active){
 
-    // News filter
-
-    if(!guardian.scores.news){
+        guardian.verdict = GuardianState.NO_TRADE;
 
         updateGuardianDashboard();
 
@@ -20,27 +20,45 @@ function confirmTradeSetup(){
 
     }
 
-    // Required confirmations
+    // --------------------------
+    // Prevent Duplicate Signals
+    // --------------------------
 
-    const confirmed =
+    if(guardian.memory.tradeIssued){
 
-        guardian.scores.liquidity &&
+        return;
 
-        guardian.scores.rejection &&
+    }
 
-        guardian.scores.structure &&
+    // --------------------------
+    // Count Confirmations
+    // --------------------------
 
-        guardian.scores.displacement &&
+    let confirmations = 0;
 
-        guardian.scores.fvg &&
+    if(guardian.scores.liquidity) confirmations++;
 
-           guardian.memory.orderBlockConfirmed &&
+    if(guardian.scores.rejection) confirmations++;
 
-        guardian.scores.premiumDiscount &&
+    if(guardian.scores.structure) confirmations++;
 
-        guardian.scores.riskReward;
+    if(guardian.scores.displacement) confirmations++;
 
-    if(!confirmed){
+    if(guardian.memory.fvgConfirmed) confirmations++;
+
+    if(guardian.memory.orderBlockConfirmed) confirmations++;
+
+    if(guardian.scores.premiumDiscount) confirmations++;
+
+    if(guardian.scores.riskReward) confirmations++;
+
+    guardian.memory.confirmations = confirmations;
+
+    // --------------------------
+    // Waiting...
+    // --------------------------
+
+    if(confirmations < 8){
 
         guardian.verdict = GuardianState.WATCHING;
 
@@ -50,19 +68,29 @@ function confirmTradeSetup(){
 
     }
 
-    // Final Direction
+    // --------------------------
+    // BUY
+    // --------------------------
 
-    if(guardian.bias===MarketBias.BULLISH){
+    if(guardian.bias === MarketBias.BULLISH){
 
         guardian.verdict = GuardianState.BUY_READY;
 
     }
 
-    if(guardian.bias===MarketBias.BEARISH){
+    // --------------------------
+    // SELL
+    // --------------------------
+
+    else if(guardian.bias === MarketBias.BEARISH){
 
         guardian.verdict = GuardianState.SELL_READY;
 
     }
+
+    guardian.memory.tradeIssued = true;
+
+    updateConfidence();
 
     updateGuardianDashboard();
 
